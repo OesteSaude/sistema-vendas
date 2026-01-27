@@ -251,7 +251,7 @@ async function salvarCotacaoNoLog() {
         console.log('%c📋 Dados a salvar:', 'color: #0066cc; font-weight: bold;', dadosCotacao);
         
         // ⭐ CONSTRUIR URL COM PARÂMETROS (GET)
-        const url = new URL('https://script.google.com/macros/d/SEU_ID_AQUI/usercontent');
+        const url = new URL('https://script.google.com/macros/s/AKfycbwXJjASI44OyzG9W6ONYpNcXdZlRuJszY5FXOIqFcE7cxhOV5C-iAXevFV9G7Wl4sOX/exec');
         Object.keys(dadosCotacao).forEach(key => {
             url.searchParams.append(key, dadosCotacao[key]);
         });
@@ -276,4 +276,5 @@ async function salvarCotacaoNoLog() {
         LOADING_SERVICE.error('❌ Erro ao registrar cotação no log');
     }
 }
+
 
