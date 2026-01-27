@@ -15,7 +15,7 @@ const CIDADES_POR_REGIAO = {
         'Bataguassu',
         'Anaurilândia'
     ],
-    'Dourados (DRD)': [
+    'Dourados (MS)': [
         'Dourados'
     ],
     'Corpe (SP)': [
@@ -79,3 +79,4 @@ function obterRegioes() {
 
 console.log('✅ CITIES carregado com sucesso');
 console.log('📍 Regiões disponíveis:', obterRegioes().length);
+
