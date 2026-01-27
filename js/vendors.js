@@ -199,25 +199,8 @@ async function criarNovoVendedor() {
         const nomeVendedor = document.getElementById('vendedorNome').value.trim();
         const emailVendedor = document.getElementById('vendedorEmail').value.trim();
         const telefoneVendedor = document.getElementById('vendedorTelefone').value.trim();
-        const senhaPadrao = gerarSenhaAleatoria(); // Retorna 'Senha123!'
 
         // --- Validação dos campos do lado do cliente ---
-            const nomeFormatado = formatarNome(nomeVendedor);
-            const telefoneFormatado = formatarTelefone(telefoneVendedor);
-
-            // ⭐ Validar telefone (deve ter 10 ou 11 dígitos)
-            if (telefoneFormatado.length < 10 || telefoneFormatado.length > 11) {
-                LOADING_SERVICE.error('❌ Telefone inválido! Use (11) 99999-9999');
-                return;
-            }
-
-           if (!emailVendedor.endsWith('@oestesaude.com.br')) {
-              mostrarModalDominioInvalido(emailVendedor);
-            return;
-            } else 
-                {
-                await criarVendedorNoFirebase(emailVendedor, nomeVendedor, telefoneVendedor);
-            }        
         if (!nomeVendedor) {
             LOADING_SERVICE.error('❌ Por favor, insira o nome completo do vendedor.');
             return;
@@ -231,30 +214,32 @@ async function criarNovoVendedor() {
             return;
         }
 
+        // ⭐ VALIDAR DOMÍNIO DO EMAIL
+        if (!emailVendedor.endsWith('@oestesaude.com.br')) {
+            mostrarModalDominioInvalido(emailVendedor);
+            return;
+        }
+
+        // ⭐ FORMATAR DADOS
+        const nomeFormatado = formatarNome(nomeVendedor);
+        const telefoneFormatado = formatarTelefone(telefoneVendedor);
+
         LOADING_SERVICE.show('⏳ Criando vendedor...', 'default'); // Exibe mensagem de carregamento
 
-        // --- 1. Criar usuário no Firebase Authentication ---
-        const userCredential = await firebase.auth().createUserWithEmailAndPassword(emailVendedor, senhaPadrao);
-        const uid = userCredential.user.uid; // Obtém o UID do usuário recém-criado
-        console.log(`%c👤 Usuário Auth criado com UID: ${uid}`, 'color: #22c55e;');
+        // ⭐ CHAMAR FUNÇÃO QUE CRIA NO FIREBASE
+        await criarVendedorNoFirebase(emailVendedor, nomeFormatado, telefoneFormatado);
 
-        // --- 2. Salvar dados adicionais no Firebase Realtime Database ---
-        const vendedorData = {
-            nome: nomeVendedor,
-            email: emailVendedor,
-            telefone: telefoneVendedor,
-            tipo: 'vendedor' // Define o tipo de usuário
-        };
-        // Salva os dados do vendedor sob o nó 'vendedores' usando o UID como chave
-        await firebase.database().ref('vendedores/' + uid).set(vendedorData);
-        console.log(`%c💾 Dados do vendedor salvos no Realtime DB para UID: ${uid}`, 'color: #22c55e;');
+        // ⭐ FECHAR MODAL
+        const modal = document.getElementById('criarVendedorModal');
+        if (modal) {
+            modal.remove();
+        }
 
-LOADING_SERVICE.success('✅ Vendedor criado com sucesso!'); // Exibe mensagem de sucesso
-document.getElementById('criarVendedorModal').remove(); // Fecha o modal após sucesso
-console.log('%c🎉 Vendedor criado e modal fechado!', 'color: #22c55e; font-weight: bold;');
+        console.log('%c🎉 Vendedor criado e modal fechado!', 'color: #22c55e; font-weight: bold;');
 
-// ⭐ MOSTRAR TELA DE SUCESSO
-mostrarSuccessScreenVendedor();
+        // ⭐ MOSTRAR TELA DE SUCESSO
+        LOADING_SERVICE.hide();
+        mostrarSuccessScreenVendedor();
 
     } catch (error) {
         console.error('%c❌ Erro ao criar vendedor:', 'color: #dc2626; font-weight: bold;', error);
@@ -270,17 +255,17 @@ mostrarSuccessScreenVendedor();
                     errorMessage = 'O formato do email é inválido.';
                     break;
                 case 'auth/weak-password':
-                    errorMessage = 'A senha é muito fraca (mínimo 6 caracteres).'; // Embora usemos padrão, é bom ter
+                    errorMessage = 'A senha é muito fraca (mínimo 6 caracteres).';
                     break;
                 default:
                     errorMessage = `Erro de autenticação: ${error.message}`;
             }
         } else {
-            errorMessage = error.message; // Erros de validação ou outros
+            errorMessage = error.message;
         }
-        LOADING_SERVICE.error(`❌ ${errorMessage}`); // Exibe mensagem de erro
+        LOADING_SERVICE.error(`❌ ${errorMessage}`);
     } finally {
-        LOADING_SERVICE.hide(); // Esconde o carregamento em qualquer caso
+        LOADING_SERVICE.hide();
     }
 }
 async function salvarVendedorPendente(email, nome, telefone) {
@@ -519,4 +504,5 @@ function fecharComESC(event) {
 }
 
 console.log('%c✅ VENDOR-SUCCESS carregado', 'color: #16a34a; font-weight: bold;');
+
 
