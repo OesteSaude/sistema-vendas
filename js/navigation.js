@@ -21,6 +21,7 @@ function mudarAba(numero) {
 
     if (numero === 1) {
         // ABA 1: DADOS DO CLIENTE
+        carregarCidades();  // ⭐ ADICIONE ESTA LINHA
         atualizarStatusValidacao();
     }
     if (numero === 2) {
@@ -536,4 +537,5 @@ function showLogoutModal() {
             closeModal();
         }
     });
+
 }
