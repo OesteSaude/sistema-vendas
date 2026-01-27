@@ -310,15 +310,7 @@ function carregarCidades() {
             return;
         }
         
-        // ⭐ VERIFICAR SE JÁ TEM CIDADES CARREGADAS
-        const jaTemCidades = selectCidade.querySelectorAll('option').length > 1;
-        
-        if (jaTemCidades) {
-            console.log('%c✅ Cidades já carregadas, pulando...', 'color: #16a34a; font-weight: bold;');
-            return; // ⭐ NÃO LIMPAR SE JÁ TIVER CIDADES
-        }
-        
-        // Limpar opções anteriores (apenas se não tiver cidades)
+        // ⭐ SEMPRE LIMPAR E RECARREGAR (REMOVA A VERIFICAÇÃO ANTERIOR)
         selectCidade.innerHTML = '<option value="">Selecione uma cidade...</option>';
         
         // Adicionar cidades da região
@@ -539,3 +531,4 @@ function showLogoutModal() {
     });
 
 }
+
