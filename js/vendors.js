@@ -489,7 +489,7 @@ function fecharSuccessScreenVendedor() {
         console.log('%c⚡ Redirecionando para login...', 'color: #00A8B0; font-weight: bold;');
         
         // ⭐ REDIRECIONAR PARA LOGIN
-        window.location.href = '/login';
+        window.location.href = '/';
     }, 300);
 }
 
@@ -504,5 +504,6 @@ function fecharComESC(event) {
 }
 
 console.log('%c✅ VENDOR-SUCCESS carregado', 'color: #16a34a; font-weight: bold;');
+
 
 
