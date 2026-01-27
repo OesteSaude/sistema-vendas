@@ -213,19 +213,46 @@ async function salvarCotacaoNoLog() {
         const tipoPlano = comparacaoAtual.tipo || selectedType || '';
         const planosTexto = comparacaoAtual.planos?.join(', ') || planosSelecionados.join(', ') || '';
         
-        // ⭐ FAIXAS ETÁRIAS
-        const faixasTexto = Array.from(faixasSelecionadas)
-            .map(f => `${f.faixa}: ${f.quantidade}`)
+        // ⭐ FAIXAS ETÁRIAS - CORRIGIDO
+        const faixasTexto = Array.from(faixasSelecionadas.entries())
+            .map(([numero, faixa]) => {
+                const faixaInfo = obterFaixaInfo(numero);
+                const qtdInput = document.getElementById(`qtd${numero}`);
+                const qtd = qtdInput ? parseInt(qtdInput.value) || 0 : 0;
+                return `${faixaInfo.nome}: ${qtd}`;
+            })
+            .filter(f => !f.includes(': 0')) // Remove faixas com 0 pessoas
             .join(' | ') || '';
         
-        // ⭐ VALORES POR PLANO
+        console.log('%c📊 Faixas formatadas:', 'color: #0066cc; font-weight: bold;', faixasTexto);
+        
+        // ⭐ VALORES POR PLANO - CORRIGIDO
         const valoresTexto = comparacaoAtual.resultados
-            ?.map(r => `${r.plano}: R$ ${r.valorFinal.toFixed(2)}`)
+            ?.map(r => {
+                const valorFormatado = r.valorFinal.toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+                return `${r.plano}: ${valorFormatado}`;
+            })
             .join(' | ') || '';
         
-        // ⭐ TOTAL
+        console.log('%c💰 Valores formatados:', 'color: #0066cc; font-weight: bold;', valoresTexto);
+        
+        // ⭐ TOTAL - CORRIGIDO
         const valorTotal = comparacaoAtual.resultados
             ?.reduce((acc, r) => acc + r.valorFinal, 0) || 0;
+        
+        const valorTotalFormatado = valorTotal.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        
+        console.log('%c💵 Total formatado:', 'color: #0066cc; font-weight: bold;', valorTotalFormatado);
         
         // ⭐ GERAR ID ÚNICO
         const idCotacao = `COT-${Date.now()}`;
@@ -247,7 +274,7 @@ async function salvarCotacaoNoLog() {
         url.searchParams.append('planos', planosTexto);
         url.searchParams.append('faixasEtarias', faixasTexto);
         url.searchParams.append('valores', valoresTexto);
-        url.searchParams.append('total', valorTotal);
+        url.searchParams.append('total', valorTotalFormatado);
         url.searchParams.append('status', 'Pendente');
         
         console.log('%c🔗 URL enviada:', 'color: #0066cc; font-weight: bold;');
@@ -275,3 +302,4 @@ async function salvarCotacaoNoLog() {
         LOADING_SERVICE.error('❌ Erro ao registrar cotação no log');
     }
 }
+
