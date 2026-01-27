@@ -415,4 +415,104 @@ function descartarPropostaModal() {
     }
     
     console.log('%c✅ Proposta descartada!', 'color: #16a34a; font-weight: bold;');
+
 }
+// ===== TELA DE SUCESSO - CRIAÇÃO DE VENDEDOR =====
+
+let contadorRegressivoInterval = null;
+
+/**
+ * Mostrar tela de sucesso ao criar vendedor
+ */
+function mostrarSuccessScreenVendedor() {
+    const successScreen = document.getElementById('successScreenVendedor');
+    
+    if (!successScreen) {
+        console.error('❌ Elemento #successScreenVendedor não encontrado!');
+        return;
+    }
+    
+    // ⭐ MOSTRAR A TELA DE SUCESSO
+    successScreen.classList.remove('hidden');
+    console.log('%c✅ Tela de sucesso exibida', 'color: #16a34a; font-weight: bold;');
+    
+    // ⭐ INICIAR CONTADOR REGRESSIVO
+    iniciarContadorRegressivo();
+    
+    // ⭐ PERMITIR FECHAR COM ESC
+    document.addEventListener('keydown', fecharComESC);
+}
+
+/**
+ * Iniciar contador regressivo (3, 2, 1...)
+ */
+function iniciarContadorRegressivo() {
+    let contador = 3;
+    const contadorElement = document.getElementById('contadorRegressivo');
+    
+    if (contadorElement) {
+        contadorElement.textContent = contador;
+    }
+    
+    // ⭐ LIMPAR INTERVALO ANTERIOR SE EXISTIR
+    if (contadorRegressivoInterval) {
+        clearInterval(contadorRegressivoInterval);
+    }
+    
+    contadorRegressivoInterval = setInterval(() => {
+        contador--;
+        
+        if (contadorElement) {
+            contadorElement.textContent = contador;
+        }
+        
+        // ⭐ QUANDO CHEGAR A 0, REDIRECIONAR
+        if (contador <= 0) {
+            clearInterval(contadorRegressivoInterval);
+            fecharSuccessScreenVendedor();
+        }
+    }, 1000); // 1 segundo
+}
+
+/**
+ * Fechar tela de sucesso e redirecionar para login
+ */
+function fecharSuccessScreenVendedor() {
+    const successScreen = document.getElementById('successScreenVendedor');
+    
+    if (!successScreen) return;
+    
+    // ⭐ LIMPAR INTERVALO
+    if (contadorRegressivoInterval) {
+        clearInterval(contadorRegressivoInterval);
+    }
+    
+    // ⭐ REMOVER EVENT LISTENER DE ESC
+    document.removeEventListener('keydown', fecharComESC);
+    
+    // ⭐ ANIMAR SAÍDA
+    successScreen.style.transition = 'opacity 0.3s ease-out';
+    successScreen.style.opacity = '0';
+    
+    setTimeout(() => {
+        successScreen.classList.add('hidden');
+        successScreen.style.opacity = '1'; // Resetar para próxima vez
+        
+        console.log('%c⚡ Redirecionando para login...', 'color: #00A8B0; font-weight: bold;');
+        
+        // ⭐ REDIRECIONAR PARA LOGIN
+        window.location.href = '/login';
+    }, 300);
+}
+
+/**
+ * Fechar com tecla ESC
+ */
+function fecharComESC(event) {
+    if (event.key === 'Escape') {
+        console.log('%c🔑 Tecla ESC pressionada', 'color: #0066cc; font-weight: bold;');
+        fecharSuccessScreenVendedor();
+    }
+}
+
+console.log('%c✅ VENDOR-SUCCESS carregado', 'color: #16a34a; font-weight: bold;');
