@@ -196,3 +196,84 @@ function imprimirPDF() {
         window.print();
     }
 }
+/**
+ * Salvar cotação no Google Sheets via Apps Script
+ */
+async function salvarCotacaoNoLog() {
+    console.log('%c📊 Salvando cotação no log...', 'color: #0066cc; font-weight: bold;');
+    
+    try {
+        // ⭐ PREPARAR DADOS DA COTAÇÃO
+        const dataCotacao = new Date().toLocaleString('pt-BR');
+        const vendedora = vendedorLogado || 'Desconhecido';
+        const nomeClienteVar = comparacaoAtual.cliente || nomeCliente || '';
+        const emailClienteVar = emailCliente || '';
+        const telefoneClienteVar = telefonecliente || '';
+        const regiao = comparacaoAtual.regiao || selectedRegion || '';
+        const tipo = comparacaoAtual.tipo || selectedType || '';
+        const planosTexto = comparacaoAtual.planos?.join(', ') || planosSelecionados.join(', ') || '';
+        
+        // ⭐ FAIXAS ETÁRIAS
+        const faixasTexto = Array.from(faixasSelecionadas)
+            .map(f => `${f.faixa}: ${f.quantidade}`)
+            .join(' | ') || '';
+        
+        // ⭐ VALORES POR PLANO
+        const valoresTexto = comparacaoAtual.resultados
+            ?.map(r => `${r.plano}: R$ ${r.valorFinal.toFixed(2)}`)
+            .join(' | ') || '';
+        
+        // ⭐ TOTAL
+        const valorTotal = comparacaoAtual.resultados
+            ?.reduce((acc, r) => acc + r.valorFinal, 0) || 0;
+        
+        // ⭐ GERAR ID ÚNICO
+        const idCotacao = `COT-${Date.now()}`;
+        
+        // ⭐ PREPARAR OBJETO PARA ENVIAR
+        const dadosCotacao = {
+            tipo: 'adicionarCotacao',
+            id: idCotacao,
+            vendedora: vendedora,
+            dataHora: dataCotacao,
+            nomeCliente: nomeClienteVar,
+            emailCliente: emailClienteVar,
+            telefoneCliente: telefoneClienteVar,
+            regiao: regiao,
+            tipo: tipo,
+            planos: planosTexto,
+            faixasEtarias: faixasTexto,
+            valores: valoresTexto,
+            total: valorTotal,
+            status: 'Pendente'
+        };
+        
+        console.log('%c📋 Dados a salvar:', 'color: #0066cc; font-weight: bold;', dadosCotacao);
+        
+        // ⭐ CONSTRUIR URL COM PARÂMETROS (GET)
+        const url = new URL('https://script.google.com/macros/d/SEU_ID_AQUI/usercontent');
+        Object.keys(dadosCotacao).forEach(key => {
+            url.searchParams.append(key, dadosCotacao[key]);
+        });
+        
+        console.log('%c🔗 URL enviada:', 'color: #0066cc; font-weight: bold;', url.toString());
+        
+        // ⭐ ENVIAR PARA GOOGLE SHEETS VIA APPS SCRIPT
+        const response = await fetch(url, {
+            method: 'GET',
+            mode: 'no-cors'
+        });
+        
+        console.log('%c✅ Cotação salva com sucesso!', 'color: #16a34a; font-weight: bold;');
+        console.log('ID da cotação:', idCotacao);
+        LOADING_SERVICE.success('✅ Cotação registrada no log!');
+        
+        // ⭐ GUARDAR ID DA COTAÇÃO PARA REFERÊNCIA FUTURA
+        comparacaoAtual.idCotacao = idCotacao;
+        
+    } catch (erro) {
+        console.error('%c❌ Erro ao salvar cotação:', 'color: #dc2626; font-weight: bold;', erro);
+        LOADING_SERVICE.error('❌ Erro ao registrar cotação no log');
+    }
+}
+
