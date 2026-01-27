@@ -210,7 +210,7 @@ async function salvarCotacaoNoLog() {
         const emailClienteVar = emailCliente || '';
         const telefoneClienteVar = telefonecliente || '';
         const regiao = comparacaoAtual.regiao || selectedRegion || '';
-        const tipo = comparacaoAtual.tipo || selectedType || '';
+        const tipoPlano = comparacaoAtual.tipo || selectedType || '';
         const planosTexto = comparacaoAtual.planos?.join(', ') || planosSelecionados.join(', ') || '';
         
         // ⭐ FAIXAS ETÁRIAS
@@ -230,39 +230,38 @@ async function salvarCotacaoNoLog() {
         // ⭐ GERAR ID ÚNICO
         const idCotacao = `COT-${Date.now()}`;
         
-        // ⭐ PREPARAR OBJETO PARA ENVIAR
-        const dadosCotacao = {
-            tipo: 'adicionarCotacao',
-            id: idCotacao,
-            vendedora: vendedora,
-            dataHora: dataCotacao,
-            nomeCliente: nomeClienteVar,
-            emailCliente: emailClienteVar,
-            telefoneCliente: telefoneClienteVar,
-            regiao: regiao,
-            tipo: tipo,
-            planos: planosTexto,
-            faixasEtarias: faixasTexto,
-            valores: valoresTexto,
-            total: valorTotal,
-            status: 'Pendente'
-        };
-        
-        console.log('%c📋 Dados a salvar:', 'color: #0066cc; font-weight: bold;', dadosCotacao);
-        
         // ⭐ CONSTRUIR URL COM PARÂMETROS (GET)
-        const url = new URL('https://script.google.com/macros/s/AKfycbwXJjASI44OyzG9W6ONYpNcXdZlRuJszY5FXOIqFcE7cxhOV5C-iAXevFV9G7Wl4sOX/exec');
-        Object.keys(dadosCotacao).forEach(key => {
-            url.searchParams.append(key, dadosCotacao[key]);
-        });
+        const urlBase = 'https://script.google.com/macros/s/AKfycbwXJjASI44OyzG9W6ONYpNcXdZlRuJszY5FXOIqFcE7cxhOV5C-iAXevFV9G7Wl4sOX/exec';
+        const url = new URL(urlBase);
         
-        console.log('%c🔗 URL enviada:', 'color: #0066cc; font-weight: bold;', url.toString());
+        // ⭐ ADICIONAR PARÂMETROS
+        url.searchParams.append('tipo', 'adicionarCotacao');
+        url.searchParams.append('id', idCotacao);
+        url.searchParams.append('vendedora', vendedora);
+        url.searchParams.append('dataHora', dataCotacao);
+        url.searchParams.append('nomeCliente', nomeClienteVar);
+        url.searchParams.append('emailCliente', emailClienteVar);
+        url.searchParams.append('telefoneCliente', telefoneClienteVar);
+        url.searchParams.append('regiao', regiao);
+        url.searchParams.append('tipoPlano', tipoPlano);
+        url.searchParams.append('planos', planosTexto);
+        url.searchParams.append('faixasEtarias', faixasTexto);
+        url.searchParams.append('valores', valoresTexto);
+        url.searchParams.append('total', valorTotal);
+        url.searchParams.append('status', 'Pendente');
+        
+        console.log('%c🔗 URL enviada:', 'color: #0066cc; font-weight: bold;');
+        console.log(url.toString());
         
         // ⭐ ENVIAR PARA GOOGLE SHEETS VIA APPS SCRIPT
-        const response = await fetch(url, {
-            method: 'GET',
-            mode: 'no-cors'
+        const response = await fetch(url.toString(), {
+            method: 'GET'
         });
+        
+        console.log('%c✅ Resposta do servidor:', 'color: #16a34a; font-weight: bold;', response.status);
+        
+        const responseText = await response.text();
+        console.log('%c📋 Resposta completa:', 'color: #0066cc; font-weight: bold;', responseText);
         
         console.log('%c✅ Cotação salva com sucesso!', 'color: #16a34a; font-weight: bold;');
         console.log('ID da cotação:', idCotacao);
@@ -276,5 +275,3 @@ async function salvarCotacaoNoLog() {
         LOADING_SERVICE.error('❌ Erro ao registrar cotação no log');
     }
 }
-
-
