@@ -17,6 +17,42 @@ const CIDADES_POR_REGIAO = {
     ],
     'Dourados (DRD)': [
         'Dourados'
+    ],
+    'Corpe (SP)': [
+        'Adamantina',
+        'Dracena',
+        'Osvaldo Cruz',
+        'Presidente Epitácio',
+        'Presidente Prudente',
+        'Presidente Venceslau'
+    ],
+    'Corpe (MS)': [
+        'Campo Grande',
+        'Nova Andradina',
+        'Três Lagoas',
+        'Bataguassu',
+        'Anaurilândia'
+    ],
+    'Corpe (DRD)': [
+        'Dourados'
+    ],
+    'Lancers (SP)': [
+        'Adamantina',
+        'Dracena',
+        'Osvaldo Cruz',
+        'Presidente Epitácio',
+        'Presidente Prudente',
+        'Presidente Venceslau'
+    ],
+    'Lancers (MS)': [
+        'Campo Grande',
+        'Nova Andradina',
+        'Três Lagoas',
+        'Bataguassu',
+        'Anaurilândia'
+    ],
+    'Lancers (DRD)': [
+        'Dourados'
     ]
 };
 
