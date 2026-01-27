@@ -249,9 +249,12 @@ async function criarNovoVendedor() {
         await firebase.database().ref('vendedores/' + uid).set(vendedorData);
         console.log(`%c💾 Dados do vendedor salvos no Realtime DB para UID: ${uid}`, 'color: #22c55e;');
 
-        LOADING_SERVICE.success('✅ Vendedor criado com sucesso!'); // Exibe mensagem de sucesso
-        document.getElementById('criarVendedorModal').remove(); // Fecha o modal após sucesso
-        console.log('%c🎉 Vendedor criado e modal fechado!', 'color: #22c55e; font-weight: bold;');
+LOADING_SERVICE.success('✅ Vendedor criado com sucesso!'); // Exibe mensagem de sucesso
+document.getElementById('criarVendedorModal').remove(); // Fecha o modal após sucesso
+console.log('%c🎉 Vendedor criado e modal fechado!', 'color: #22c55e; font-weight: bold;');
+
+// ⭐ MOSTRAR TELA DE SUCESSO
+mostrarSuccessScreenVendedor();
 
     } catch (error) {
         console.error('%c❌ Erro ao criar vendedor:', 'color: #dc2626; font-weight: bold;', error);
@@ -516,3 +519,4 @@ function fecharComESC(event) {
 }
 
 console.log('%c✅ VENDOR-SUCCESS carregado', 'color: #16a34a; font-weight: bold;');
+
