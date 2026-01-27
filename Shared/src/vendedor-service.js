@@ -1,5 +1,3 @@
-// ===== SERVIÇO DE VENDEDORES =====
-
 const VENDEDOR_SERVICE = {
     /**
      * Obter dados do vendedor pelo UID
@@ -10,7 +8,6 @@ const VENDEDOR_SERVICE = {
         try {
             console.log('%c🔍 Buscando dados do vendedor...', 'color: #0066cc; font-weight: bold;', uid);
 
-            // ⭐ CORREÇÃO: Usar o caminho 'users/' no Firebase
             const ref = firebase.database().ref(`users/${uid}`);
             const snapshot = await ref.get();
 
@@ -29,6 +26,24 @@ const VENDEDOR_SERVICE = {
     },
 
     /**
+     * Obter dados do vendedor do localStorage (fallback rápido)
+     * @param {string} nome - Nome do vendedor
+     * @returns {object} Os dados do vendedor
+     */
+    obterDadosVendedorLocal(nome) {
+        console.log('%c👤 Buscando dados do vendedor no localStorage...', 'color: #0066cc; font-weight: bold;', nome);
+        
+        const vendedorEmail = localStorage.getItem('vendedorEmail') || '';
+        const vendedorTelefone = localStorage.getItem('vendedorTelefone') || '';
+        
+        return {
+            nome: nome || localStorage.getItem('vendedorNome') || 'Desconhecido',
+            email: vendedorEmail,
+            telefone: vendedorTelefone
+        };
+    },
+
+    /**
      * Salvar/Atualizar dados do vendedor
      * @param {string} uid - O UID do vendedor.
      * @param {object} dados - O objeto de dados a ser salvo.
@@ -38,7 +53,6 @@ const VENDEDOR_SERVICE = {
         try {
             console.log('%c💾 Salvando dados do vendedor...', 'color: #0066cc; font-weight: bold;', dados);
 
-            // ⭐ CORREÇÃO: Usar o caminho 'users/' no Firebase
             const ref = firebase.database().ref(`users/${uid}`);
             await ref.set(dados);
 
@@ -60,7 +74,6 @@ const VENDEDOR_SERVICE = {
         try {
             console.log('%c✏️ Atualizando dados do vendedor...', 'color: #0066cc; font-weight: bold;', campos);
 
-            // ⭐ CORREÇÃO: Usar o caminho 'users/' no Firebase
             const ref = firebase.database().ref(`users/${uid}`);
             await ref.update(campos);
 
