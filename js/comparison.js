@@ -187,6 +187,7 @@ function gerarComparacao() {
         totalPessoas: totalPessoas
     };
 
+	salvarCotacaoNoLog();
     renderizarResultado();
     mudarAba(5);
 }
@@ -545,4 +546,5 @@ function mostrarModalCRM() {
     document.getElementById('modalAdicionarCRM').classList.remove('hidden');
     
     console.log('%c✅ Modal de CRM exibido com sucesso!', 'color: #16a34a; font-weight: bold;');
+
 }
