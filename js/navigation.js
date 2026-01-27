@@ -245,9 +245,7 @@ function validarDadosCliente() {
 }
 
 function atualizarStatusValidacao() {
-    // ⭐ CARREGAR CIDADES QUANDO ENTRAR NA ABA DE CLIENTE
-    carregarCidades();
-    
+
     const validacao = validarDadosCliente();
     const btnSelecionarTipo = document.getElementById('btnSelecionarTipo');
     const avisoValidacao = document.getElementById('avisoValidacaoDados');
@@ -531,4 +529,5 @@ function showLogoutModal() {
     });
 
 }
+
 
