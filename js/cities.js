@@ -56,4 +56,26 @@ const CIDADES_POR_REGIAO = {
     ]
 };
 
-console.log('✅ CITIES carregado');
+/**
+ * Obter cidades de uma região
+ * @param {string} regiao - Nome da região
+ * @returns {array} Lista de cidades
+ */
+function obterCidades(regiao) {
+    if (!regiao || !CIDADES_POR_REGIAO[regiao]) {
+        console.warn(`⚠️ Região não encontrada: ${regiao}`);
+        return [];
+    }
+    return CIDADES_POR_REGIAO[regiao];
+}
+
+/**
+ * Obter todas as regiões disponíveis
+ * @returns {array} Lista de regiões
+ */
+function obterRegioes() {
+    return Object.keys(CIDADES_POR_REGIAO);
+}
+
+console.log('✅ CITIES carregado com sucesso');
+console.log('📍 Regiões disponíveis:', obterRegioes().length);
