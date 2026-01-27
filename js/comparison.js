@@ -322,14 +322,21 @@ function mudarParaIndividual() {
         }
 
         function renderizarResultado() {
-            const { vendedor, regiao, tipo, cliente, faixas, resultados, taxaAdm } = comparacaoAtual;
-            const dadosContato = obterDadosVendedor(vendedor);
-
-            nomeClienteInput = document.getElementById('nomeCliente')?.value || 'Não informado';
-            
-            document.getElementById('previewVendedor').textContent = vendedor;
-            document.getElementById('previewTelefone').textContent = dadosContato.telefone;
-            document.getElementById('previewEmail').textContent = dadosContato.email;
+			const { vendedor, regiao, tipo, cliente, faixas, resultados, taxaAdm } = comparacaoAtual;
+			
+			// ⭐ USAR O SERVICE PARA BUSCAR DADOS DO VENDEDOR
+			const dadosContato = VENDEDOR_SERVICE.obterDadosVendedorLocal(vendedor);
+			
+			nomeClienteInput = document.getElementById('nomeCliente')?.value || 'Não informado';
+			
+			console.log('%c👤 Dados do vendedor:', 'color: #0066cc; font-weight: bold;');
+			console.log('Nome:', dadosContato.nome);
+			console.log('Email:', dadosContato.email);
+			console.log('Telefone:', dadosContato.telefone);
+			
+			document.getElementById('previewVendedor').textContent = dadosContato.nome;
+			document.getElementById('previewTelefone').textContent = dadosContato.telefone;
+			document.getElementById('previewEmail').textContent = dadosContato.email;
             document.getElementById('previewResultadoRegiao').textContent = regiao;
             document.getElementById('resultadoCidade').textContent = comparacaoAtual.cidade;
             document.getElementById('previewResultadoTipo').textContent = tipo;
@@ -548,3 +555,4 @@ function mostrarModalCRM() {
     console.log('%c✅ Modal de CRM exibido com sucesso!', 'color: #16a34a; font-weight: bold;');
 
 }
+
