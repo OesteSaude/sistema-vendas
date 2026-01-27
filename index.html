@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HUB de Cotação - Oeste Saúde</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Local -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+
+    <!-- ===== LOADING OVERLAY ===== -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+        <p class="loading-text mt-4 text-lg font-bold" style="color: #003D58;">Carregando valores...</p>
+    </div>
+
+    <!-- ===== TELA DE LOADING INICIAL ===== -->
+    <div id="loadingScreenInicial" class="flex items-center justify-center min-h-screen p-4 bg-gradient-to-br from-oeste-turqueza to-oeste-azul">
+        <div class="text-center">
+            <div class="mb-6">
+                <img src="https://i.imgur.com/l4tIG6t.png" alt="Oeste Saúde" class="oeste-logo-login mx-auto mb-4">
+            </div>
+            
+            <div class="mb-8">
+                <div class="loading-spinner" style="border-color: rgba(255, 255, 255, 0.3); border-top-color: #003D58; width: 60px; height: 60px; margin: 0 auto;"></div>
+            </div>
+
+            <h1 class="text-3xl font-bold oeste-text-primary mb-2">HUB de Cotação</h1>
+            <p class="text-lg oeste-text-secondary mb-4">Autenticando sua sessão...</p>
+            
+            <div class="flex justify-center gap-2 mt-6">
+                <div class="w-2 h-2 rounded-full animate-bounce" style="background-color: var(--oeste-turqueza); animation-delay: 0s;"></div>
+                <div class="w-2 h-2 rounded-full animate-bounce" style="background-color: var(--oeste-turqueza); animation-delay: 0.2s;"></div>
+                <div class="w-2 h-2 rounded-full animate-bounce" style="background-color: var(--oeste-turqueza); animation-delay: 0.4s;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TELA DE LOGIN ===== -->
+    <div id="loginScreen" class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <div class="text-center mb-6">
+                <img src="https://i.imgur.com/l4tIG6t.png" alt="Oeste Saúde" class="oeste-logo-login mx-auto mb-4">
+                <h1 class="text-2xl font-bold oeste-text-primary mb-1">HUB de Cotação</h1>
+                <p class="text-sm oeste-text-muted">Oeste Saúde</p>
+            </div>
+
+            <div class="mb-5">
+                <label class="block text-xs font-semibold oeste-text-primary mb-2">Email:</label>
+                <input 
+                    type="email" 
+                    id="loginEmail" 
+                    placeholder="seu.email@oestesaude.com.br"
+                    class="w-full px-3 py-3 text-sm border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-oeste-turqueza focus:border-transparent font-semibold text-gray-700"
+                    required
+                >
+            </div>
+
+            <div class="mb-5">
+                <label class="block text-xs font-semibold oeste-text-primary mb-2">Senha:</label>
+                <input 
+                    type="password" 
+                    id="loginPassword" 
+                    placeholder="Sua senha"
+                    class="w-full px-3 py-3 text-sm border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-oeste-turqueza focus:border-transparent font-semibold text-gray-700"
+                    required
+                >
+            </div>
+
+            <button onclick="fazerLogin()" class="w-full oeste-btn-primary py-3 text-base">
+                <i class="fas fa-sign-in-alt"></i> Acessar Sistema
+            </button>
+            <div class="flex justify-center mt-8">
+                <button onclick="abrirModalCriarVendedor()" class="px-4 py-2 oeste-btn-secondary text-gray-700 rounded-lg hover:oeste-btn-secondary font-semibold text-sm transition-all shadow-md flex items-center gap-4">
+                    <i class="fas fa-user-plus"></i> Criar Vendedor
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL DE ALTERAÇÃO DE SENHA ===== -->
+    <div id="changePasswordModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <div class="text-center mb-6">
+                <div class="text-5xl mb-4">🔐</div>
+                <h1 class="text-2xl font-bold oeste-text-primary mb-2">Segurança da Conta</h1>
+                <p class="text-sm oeste-text-muted">Percebemos que você não trocou sua senha ainda</p>
+            </div>
+
+            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+                <p class="text-sm text-blue-800 font-semibold">
+                    <i class="fas fa-info-circle"></i> 
+                    Gostaria de criar uma senha personalizada AGORA? Isso deixará sua conta mais segura.
+                </p>
+            </div>
+
+            <div id="formAlterarSenha" class="hidden mb-6">
+                <div class="mb-4">
+                    <label class="block text-xs font-semibold oeste-text-primary mb-2">Nova Senha:</label>
+                    <input 
+                        type="password" 
+                        id="novaSenha" 
+                        placeholder="Digite sua nova senha"
+                        class="w-full px-3 py-3 text-sm border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-oeste-turqueza focus:border-transparent font-semibold text-gray-700"
+                        required
+                    >
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-xs font-semibold oeste-text-primary mb-2">Confirmar Senha:</label>
+                    <input 
+                        type="password" 
+                        id="confirmarSenha" 
+                        placeholder="Confirme sua nova senha"
+                        class="w-full px-3 py-3 text-sm border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-oeste-turqueza focus:border-transparent font-semibold text-gray-700"
+                        required
+                    >
+                </div>
+
+                <p class="text-xs text-gray-500 mb-4">
+                    💡 Mínimo 6 caracteres
+                </p>
+            </div>
+
+            <div class="flex gap-3">
+                <button 
+                    onclick="fecharModalAlterarSenha()" 
+                    id="btnNaoTrocar"
+                    class="flex-1 px-4 py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg font-semibold text-base transition-all shadow-sm"
+                >
+                    <i class="fas fa-times"></i> Agora Não
+                </button>
+
+                <button 
+                    onclick="toggleFormAlterarSenha()" 
+                    id="btnTrocar"
+                    class="flex-1 px-4 py-3 oeste-btn-primary rounded-lg font-semibold text-base transition-all shadow-md"
+                >
+                    <i class="fas fa-lock"></i> Trocar Agora
+                </button>
+            </div>
+
+            <div id="botoesConfirmacao" class="hidden flex gap-3 mt-4">
+                <button 
+                    onclick="toggleFormAlterarSenha()" 
+                    class="flex-1 px-4 py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg font-semibold text-base transition-all shadow-sm"
+                >
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+
+                <button 
+                    onclick="alterarSenhaOpcional()" 
+                    class="flex-1 px-4 py-3 oeste-btn-primary rounded-lg font-semibold text-base transition-all shadow-md"
+                >
+                    <i class="fas fa-check"></i> Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL DE VALIDAÇÃO FAMILIAR ===== -->
+    <div id="modalValidacaoFamiliar" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <div class="text-center mb-6">
+                <div class="text-5xl mb-4">⚠️</div>
+                <h1 class="text-2xl font-bold oeste-text-primary mb-2">Plano Familiar Inválido</h1>
+                <p class="text-sm oeste-text-muted">Validação de Quantidade</p>
+            </div>
+
+            <div class="bg-yellow-50 border-2 border-yellow-300 rounded-lg p-4 mb-6">
+                <p class="text-sm text-yellow-800 font-semibold mb-3">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    Planos FAMILIARES exigem MÍNIMO 2 pessoas!
+                </p>
+                <p class="text-sm text-yellow-700">
+                    Você selecionou apenas <strong id="totalPessoasModal">1</strong> pessoa(s).
+                </p>
+            </div>
+
+            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+                <p class="text-sm text-blue-800 font-semibold mb-2">
+                    <i class="fas fa-info-circle"></i> O que fazer?
+                </p>
+                <ul class="text-sm text-blue-700 space-y-2">
+                    <li>✅ <strong>Adicionar mais pessoas</strong> para manter o plano Familiar</li>
+                    <li>📋 <strong>Mudar para Individual</strong> se preferir apenas 1 pessoa</li>
+                </ul>
+            </div>
+
+            <div class="flex gap-3">
+                <button 
+                    onclick="fecharModalValidacao()" 
+                    class="flex-1 px-4 py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg font-semibold text-base transition-all shadow-sm"
+                >
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+
+                <button 
+                    onclick="mudarParaIndividual()" 
+                    class="flex-1 px-4 py-3 oeste-btn-primary rounded-lg font-semibold text-base transition-all shadow-md"
+                >
+                    <i class="fas fa-exchange-alt"></i> Mudar para Individual
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div id="dashboard" class="hidden">
+
+        <div class="oeste-header no-print sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <img src="https://i.imgur.com/l4tIG6t.png" alt="Oeste Saúde" class="oeste-logo">
+                    <div class="oeste-header-divider">
+                        <h1 class="text-lg font-bold text-gray-800">HUB de Cotação Comparativa</h1>
+                        <p class="text-xs text-gray-600">Oeste Saúde</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <p class="text-xs text-gray-600">Vendedor(a):</p>
+                        <p class="text-sm font-bold oeste-text-primary" id="nomeVendedor"></p>
+                        <p class="text-xs text-gray-500" id="telefoneVendedor"></p>
+                    </div>
+                    <button onclick="fazerLogout()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold text-sm transition-all shadow-md flex items-center gap-2">
+                        <i class="fas fa-sign-out-alt"></i> Sair
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 py-6">
+
+            <div class="oeste-tabs-container mb-6 no-print">
+                <div class="flex border-b border-gray-200 overflow-x-auto">
+                    <button id="tab0Btn" class="oeste-tab-button active" onclick="mudarAba(0)">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>1. Região</span>
+                    </button>
+                    <button id="tab1Btn" class="oeste-tab-button" onclick="mudarAba(1)">
+                        <i class="fas fa-user-circle"></i>
+                        <span>2. Cliente</span>
+                    </button>
+                    <button id="tab2Btn" class="oeste-tab-button" onclick="mudarAba(2)">
+                        <i class="fas fa-list-check"></i>
+                        <span>3. Tipo</span>
+                    </button>
+                    <button id="tab3Btn" class="oeste-tab-button" onclick="mudarAba(3)">
+                        <i class="fas fa-cog"></i>
+                        <span>4. Configurar</span>
+                    </button>
+                    <button id="tab4Btn" class="oeste-tab-button" onclick="mudarAba(4)">
+                        <i class="fas fa-users"></i>
+                        <span>5. Faixas</span>
+                    </button>
+                    <button id="tab5Btn" class="oeste-tab-button" onclick="mudarAba(5)">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>6. Resultado</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ABA 0: SELEÇÃO DE REGIÃO -->
+            <div id="tab0" class="oeste-tab-content active">
+                <div class="oeste-card">
+                    <h2 class="oeste-card-title">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Selecione a Região
+                    </h2>
+
+                    <p class="text-sm oeste-text-muted font-semibold mb-6">
+                        <i class="fas fa-step-forward"></i> Passo 1: Escolha a região para cotação
+                    </p>
+                    <div class="regioes-grid-container" id="botoesRegiaoContainer">
+                        <!-- Grid com botões de região será gerado aqui -->
+                    </div>
+
+                    <div class="flex gap-3 mt-6">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 1: DADOS DO CLIENTE -->
+            <div id="tab1" class="oeste-tab-content">
+                                        <div id="indicativoRegiaoSelecionada" class="indicativo-regiao hidden">
+                            <div class="indicativo-content">
+                                <div class="indicativo-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="indicativo-info">
+                                    <p class="indicativo-label">Região Selecionada</p>
+                                    <p class="indicativo-valor" id="nomeRegiaoSelecionada">-</p>
+                                </div>
+                            </div>
+                        </div>
+                <div class="oeste-card">
+                    <h2 class="oeste-card-title">
+                        <i class="fas fa-user-circle"></i>
+                        Dados do Cliente
+                    </h2>
+
+                    <!-- ⭐ AVISO DE VALIDAÇÃO -->
+                    <div id="avisoValidacaoDados" class="hidden bg-red-50 border-2 border-red-300 rounded-lg p-4 mb-4">
+                        <p class="text-sm font-bold text-red-800">
+                            <i class="fas fa-exclamation-circle"></i>
+                            Preencha os dados obrigatórios
+                        </p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold oeste-text-primary mb-2">Nome do Cliente:</label>
+                        <input 
+                            type="text" 
+                            id="nomeCliente" 
+                            placeholder="Ex: João Silva"
+                            class="w-full px-3 py-3 text-sm border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-oeste-turqueza focus:border-transparent"
+                            oninput="atualizarStatusValidacao()"
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-semibold oeste-text-primary mb-2">Email do Cliente:</label>
+                        <input 
+                            type="email" 
+                            id="emailCliente" 
+                            placeholder="Ex: joao@email.com"
+                            class="w-full px-3 py-3 text-sm border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-oeste-turqueza focus:border-transparent"
+                            oninput="atualizarStatusValidacao()"
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-xs font-semibold oeste-text-primary mb-2">Telefone do Cliente:</label>
+                        <input 
+                            type="tel" 
+                            id="telefonecliente" 
+                            placeholder="Ex: (18) 99999-9999"
+                            class="w-full px-3 py-3 text-sm border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-oeste-turqueza focus:border-transparent"
+                            oninput="atualizarStatusValidacao()"
+                            required
+                        >
+                    </div>
+                    <div class="mb-5">
+                        <label class="block text-xs font-semibold oeste-text-primary mb-2">Cidade:</label>
+                        <select 
+                            id="cidade" 
+                            class="w-full px-3 py-3 text-sm border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-oeste-turqueza focus:border-transparent font-semibold text-gray-700"
+                            required
+                        >
+                            <option value="">Selecione uma cidade...</option>
+                        </select>
+                        <span class="form-error" id="cidadeError"></span>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="mudarAba(0)" class="flex-1 oeste-btn-secondary py-3 text-base">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                        <button 
+                            id="btnSelecionarTipo"
+                            onclick="mudarAba(2)" 
+                            class="flex-1 oeste-btn-primary py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                            disabled
+                        >
+                            Próximo: Tipo de Plano
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 2: SELEÇÃO DE TIPO DE PLANO -->
+            <div id="tab2" class="oeste-tab-content">
+                <div class="oeste-card">
+                    <h2 class="oeste-card-title">
+                        <i class="fas fa-list-check"></i>
+                        Selecione o Tipo de Plano
+                    </h2>
+
+                    <p class="text-sm oeste-text-muted font-semibold mb-6">
+                        <i class="fas fa-step-forward"></i> Passo 3: Escolha o tipo de plano
+                    </p>
+                    <div class="botoes-container" id="botoestipoContainer">
+                        <!-- Botões de tipo serão gerados aqui -->
+                    </div>
+
+                    <div class="flex gap-3 mt-6">
+                        <button onclick="mudarAba(1)" class="flex-1 oeste-btn-secondary py-3 text-base">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                        <button onclick="mudarAba(3)" class="flex-1 oeste-btn-primary py-3 text-base" id="btnProximoTipo" disabled>
+                            Próximo: Configurar Cotação
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 3: CONFIGURAÇÃO DE COTAÇÃO -->
+            <div id="tab3" class="oeste-tab-content">
+                <div class="oeste-card">
+                    <h2 class="oeste-card-title">
+                        <i class="fas fa-cog"></i>
+                        Configurar Cotação
+                    </h2>
+
+                    <!-- TAXA ADMINISTRADORA -->
+                    <div id="taxaAdmSection" class="mb-4 hidden">
+                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 border-2 border-purple-200 rounded-lg p-4">
+                            <label class="block text-xs font-bold text-purple-700 mb-3">
+                                <i class="fas fa-dollar-sign"></i> Taxa Administradora:
+                            </label>
+                            <input type="number" id="taxaAdm" placeholder="0.00" step="0.01" min="0" class="w-full px-3 py-2 text-sm border-2 border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent font-semibold text-gray-700">
+                            <small class="block text-xs text-purple-600 font-semibold mt-2">
+                                <i class="fas fa-info-circle"></i>
+                                Valor adicional por pessoa/mês
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- DESCONTOS ADICIONAIS -->
+                    <div id="descontosAdicionaisSection" class="mb-4 hidden">
+                        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-orange-200 rounded-lg p-4">
+                            <label class="block text-xs font-bold text-orange-700 mb-3">
+                                <i class="fas fa-percent"></i> Descontos Adicionais:
+                            </label>
+                            <div class="flex items-center gap-4 mb-3">
+                                <label class="flex items-center gap-2 text-sm font-semibold text-orange-800">
+                                    <input type="radio" name="descontoAdicional" value="OAB" class="form-radio text-orange-500" onchange="handleDescontoRadioChange(this.value)"> OAB (15%)
+                                </label>
+                                <label class="flex items-center gap-2 text-sm font-semibold text-orange-800">
+                                    <input type="radio" name="descontoAdicional" value="Estudante" class="form-radio text-orange-500" onchange="handleDescontoRadioChange(this.value)"> Estudante (20%)
+                                </label>
+                                <label class="flex items-center gap-2 text-sm font-semibold text-orange-800">
+                                    <input type="radio" name="descontoAdicional" value="Nenhum" class="form-radio text-orange-500" checked onchange="handleDescontoRadioChange(this.value)"> Nenhum
+                                </label>
+                            </div>
+                            <small class="block text-xs text-orange-600 font-semibold">
+                                <i class="fas fa-info-circle"></i>
+                                Selecione OAB ou Estudante para aplicar o desconto.
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- PLANO ODONTOLÓGICO -->
+                    <div id="planoOdontologicoSection" class="mb-4 hidden">
+                        <div class="bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-lg p-4">
+                            <label class="flex items-center gap-3 text-sm font-bold text-blue-800">
+                                <input type="checkbox" id="incluirPlanoOdontologico" class="form-checkbox text-blue-500">
+                                <i class="fas fa-tooth"></i> Deseja acrescentar plano odontológico? (R$ 25,00 por pessoa)
+                            </label>
+                            <small class="block mt-2 text-xs text-blue-600 font-semibold">
+                                <i class="fas fa-info-circle"></i>
+                                Apenas para planos Empresariais.
+                            </small>
+                        </div>
+                    </div>
+
+                    <p class="text-sm oeste-text-muted mb-3 font-semibold">
+                        <i class="fas fa-check-circle"></i> Selecione de 1 a 4 planos para comparar:
+                    </p>
+
+                    <div class="planos-grid-compact mb-4" id="planosCheckboxesContainer">
+                        <!-- Checkboxes de planos serão carregados aqui dinamicamente -->
+                    </div>
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-3 mb-4">
+                        <p class="text-sm text-blue-800 font-semibold">
+                            <i class="fas fa-info-circle"></i> Planos selecionados: <span id="planosCount" class="font-bold">0</span> de 4
+                        </p>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="mudarAba(2)" class="flex-1 oeste-btn-secondary py-3 text-base">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                        <button onclick="avancarParaAba2()" class="flex-1 oeste-btn-primary py-3 text-base">
+                            Próximo: Faixas Etárias
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 4: FAIXAS ETÁRIAS -->
+            <div id="tab4" class="oeste-tab-content">
+                <div class="oeste-card">
+                    <h2 class="oeste-card-title">
+                        <i class="fas fa-users"></i>
+                        Faixas Etárias e Quantidades
+                    </h2>
+
+                    <div class="mb-4">
+                        <h3 class="text-base font-bold oeste-text-primary mb-3">
+                            <i class="fas fa-calendar-days"></i>
+                            Selecione as Faixas Etárias e Quantidades
+                        </h3>
+                        <div class="faixa-inline-container" id="faixasContainer">
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button onclick="mudarAba(3)" class="flex-1 oeste-btn-secondary py-3 text-base">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                        <button onclick="gerarComparacao()" class="flex-1 oeste-btn-primary py-3 text-base">
+                            Gerar Comparação
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 5: RESULTADO -->
+            <div id="tab5" class="oeste-tab-content">
+                <div id="previewCard" class="oeste-card">
+                    <div class="text-center mb-5 print-only">
+                        <img src="https://i.imgur.com/l4tIG6t.png" alt="Oeste Saúde" class="oeste-logo mx-auto mb-3">
+                        <h1 class="text-2xl font-bold oeste-text-primary mb-2">Comparação de Planos</h1>
+                        <p class="text-sm oeste-text-muted">Oeste Saúde</p>
+                        <p class="text-sm font-bold oeste-text-primary" id="previewResultadoClientePrint"></p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                            <p class="text-xs font-semibold text-blue-600 mb-1">
+                                <i class="fas fa-user"></i> Vendedor(a)
+                            </p>
+                            <p class="text-sm font-bold oeste-text-primary" id="previewVendedor"></p>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                            <p class="text-xs font-semibold text-blue-600 mb-1">
+                                <i class="fas fa-phone"></i> Telefone
+                            </p>
+                            <p class="text-sm font-bold oeste-text-primary" id="previewTelefone"></p>
+                        </div>
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                            <p class="text-xs font-semibold text-blue-600 mb-1">
+                                <i class="fas fa-envelope"></i> E-mail
+                            </p>
+                            <p class="text-sm font-bold oeste-text-primary" id="previewEmail"></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <p class="text-xs font-semibold text-gray-600 mb-1">
+                                <i class="fas fa-globe"></i> Região
+                            </p>
+                            <p class="text-sm font-bold oeste-text-primary" id="previewResultadoRegiao"></p>
+                        </div>                    
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <p class="text-xs font-semibold text-gray-600 mb-1">
+                                <i class="fas fa-city"></i> Cidade
+                            </p>
+                            <p class="text-sm font-bold oeste-text-primary" id="resultadoCidade">-</p>
+                        </div>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <p class="text-xs font-semibold text-gray-600 mb-1">
+                                <i class="fas fa-tag"></i> Tipo
+                            </p>
+                            <p class="text-sm font-bold oeste-text-primary" id="previewResultadoTipo"></p>
+                        </div>
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                            <p class="text-xs font-semibold text-gray-600 mb-1">
+                                <i class="fas fa-user"></i> Cliente
+                            </p>
+                            <p class="text-sm font-bold oeste-text-primary" id="previewResultadoCliente"></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <p class="text-xs text-gray-500 text-center">
+                            <i class="fas fa-clock"></i> Gerado em: <span id="dataComparacao"></span>
+                        </p>
+                    </div>
+
+                    <div id="tabelaComparativa" class="mb-5">
+                    </div>
+
+                    <div class="no-print flex gap-3">
+                        <button id="btnNovaComparacao" class="oeste-btn-primary">
+                            <i class="fas fa-plus-circle"></i> Nova Cotação
+                        </button>
+                        <button onclick="mudarAba(4)" class="flex-1 oeste-btn-secondary py-3 text-base">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </button>
+                        <button onclick="copiarParaWhatsApp()" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold text-base transition-all shadow-md flex items-center justify-center gap-2">
+                            <i class="fab fa-whatsapp"></i>
+                            <span id="btnWhatsAppText">Copiar para WhatsApp</span>
+                        </button>
+                        <button onclick="imprimirPDF()" class="flex-1 oeste-btn-primary py-3 text-base">
+                            <i class="fas fa-print"></i> Imprimir PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== MODAL DE AVISO - PLANOS NÃO SELECIONADOS ===== -->
+<div id="modalAvisoPlanos" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+        <div class="text-center mb-6">
+            <div class="text-5xl mb-4">📋</div>
+            <h1 class="text-2xl font-bold oeste-text-primary mb-2">Ops! Faltou Selecionar</h1>
+            <p class="text-sm oeste-text-muted">Nenhum plano foi escolhido</p>
+        </div>
+
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 mb-6">
+            <p class="text-sm text-blue-800 font-semibold mb-3">
+                <i class="fas fa-info-circle"></i> 
+                Para continuar, você precisa selecionar pelo menos <strong>1 plano</strong> e no máximo <strong>4 planos</strong>.
+            </p>
+            <ul class="text-xs text-blue-700 space-y-2 ml-4">
+                <li>✅ Marque os checkboxes dos planos desejados</li>
+                <li>✅ Veja o contador atualizar em tempo real</li>
+                <li>✅ Clique em "Avançar" quando terminar</li>
+            </ul>
+        </div>
+
+        <div class="bg-amber-50 border-2 border-amber-200 rounded-lg p-4 mb-6">
+            <p class="text-sm text-amber-800 font-semibold mb-2">
+                <i class="fas fa-lightbulb"></i> 
+                Está tendo dificuldades?
+            </p>
+            <p class="text-xs text-amber-700">
+                Confira nosso tutorial rápido para entender melhor como funciona a seleção de planos!
+            </p>
+        </div>
+
+        <div class="flex gap-3">
+            <!-- BOTÃO FECHAR (CINZA, DISCRETO) -->
+            <button 
+                onclick="fecharModalAvisoPlanos()" 
+                class="flex-1 px-4 py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg font-semibold text-base transition-all shadow-sm"
+            >
+                <i class="fas fa-times"></i> Entendi
+            </button>
+
+            <!-- BOTÃO TUTORIAL (COLORIDO, DESTACADO) -->
+            <button 
+                onclick="abrirTutorialPlanos()" 
+                class="flex-1 px-4 py-3 oeste-btn-primary rounded-lg font-semibold text-base transition-all shadow-md"
+            >
+                <i class="fas fa-graduation-cap"></i> Ver Tutorial
+            </button>
+        </div>
+    </div>
+</div>
+
+                <!-- ===== MODAL DE TUTORIAL - SELEÇÃO DE PLANOS (CARDS) ===== -->
+                <div id="modalTutorialPlanos" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-2xl">
+                        
+                        <!-- HEADER -->
+                        <div class="text-center mb-8">
+                            <div class="text-5xl mb-4">🎓</div>
+                            <h1 class="text-2xl font-bold oeste-text-primary mb-2">Tutorial: Como Selecionar Planos</h1>
+                            <p class="text-sm oeste-text-muted">Guia rápido e prático</p>
+                        </div>
+
+                        <!-- CARDS CONTAINER -->
+                        <div id="tutorialCardsContainer" class="relative min-h-64">
+                            <!-- Cards serão gerados aqui dinamicamente -->
+                        </div>
+
+                        <!-- INDICADOR DE PROGRESSO -->
+                        <div class="flex items-center justify-center gap-2 mb-6 mt-8">
+                            <span id="tutorialProgressText" class="text-sm font-semibold oeste-text-primary">Passo 1 de 5</span>
+                            <div class="flex gap-1">
+                                <div id="dot0" class="w-2 h-2 bg-oeste-turqueza rounded-full transition-all"></div>
+                                <div id="dot1" class="w-2 h-2 bg-gray-300 rounded-full transition-all"></div>
+                                <div id="dot2" class="w-2 h-2 bg-gray-300 rounded-full transition-all"></div>
+                                <div id="dot3" class="w-2 h-2 bg-gray-300 rounded-full transition-all"></div>
+                                <div id="dot4" class="w-2 h-2 bg-gray-300 rounded-full transition-all"></div>
+                            </div>
+                        </div>
+
+                        <!-- BOTÕES DE NAVEGAÇÃO -->
+                        <div class="flex gap-3">
+                            <button 
+                                id="btnTutorialAnterior"
+                                onclick="tutorialAnterior()" 
+                                class="flex-1 px-4 py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg font-semibold text-base transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled
+                            >
+                                <i class="fas fa-arrow-left"></i> Anterior
+                            </button>
+
+                            <button 
+                                id="btnTutorialProximo"
+                                onclick="tutorialProximo()" 
+                                class="flex-1 px-4 py-3 oeste-btn-primary rounded-lg font-semibold text-base transition-all shadow-md"
+                            >
+                                Próximo <i class="fas fa-arrow-right"></i>
+                            </button>
+
+                            <button 
+                                id="btnTutorialFinalizar"
+                                onclick="fecharModalTutorialPlanos()" 
+                                class="hidden flex-1 px-4 py-3 oeste-btn-primary rounded-lg font-semibold text-base transition-all shadow-md"
+                            >
+                                <i class="fas fa-check"></i> Entendi!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- ===== MODAL DE ADICIONAR AO CRM ===== -->
+                <div id="modalAdicionarCRM" class="modal-crm hidden">
+                    <div class="modal-crm-overlay"></div>
+                    
+                    <div class="modal-crm-content">
+                        <!-- Header -->
+                        <div class="modal-crm-header">
+                            <div class="modal-crm-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h2>🎉 Cotação Realizada com Sucesso!</h2>
+                            <p>Gostaria de adicionar esta proposta ao seu CRM?</p>
+                        </div>
+                        
+                        <!-- Conteúdo Principal -->
+                        <div class="modal-crm-body">
+                            <!-- Seção: Dados do Cliente -->
+                            <div class="crm-section">
+                                <h3 class="crm-section-title">👤 Dados do Cliente</h3>
+                                <div class="crm-grid">
+                                    <div class="crm-field">
+                                        <span class="crm-label">Nome</span>
+                                        <span class="crm-value" id="crmNomeCliente">-</span>
+                                    </div>
+                                    <div class="crm-field">
+                                        <span class="crm-label">Email</span>
+                                        <span class="crm-value" id="crmEmailCliente">-</span>
+                                    </div>
+                                    <div class="crm-field">
+                                        <span class="crm-label">Telefone</span>
+                                        <span class="crm-value" id="crmTelefoneCliente">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Seção: Detalhes da Cotação -->
+                            <div class="crm-section">
+                                <h3 class="crm-section-title">📋 Detalhes da Cotação</h3>
+                                <div class="crm-grid">
+                                    <div class="crm-field">
+                                        <span class="crm-label">Região</span>
+                                        <span class="crm-value" id="crmRegiao">-</span>
+                                    </div>
+                                    <div class="crm-field">
+                                        <span class="crm-label">Cidade</span>
+                                        <span class="crm-value" id="crmCidade">-</span>
+                                    </div>
+                                    <div class="crm-field">
+                                        <span class="crm-label">Tipo de Plano</span>
+                                        <span class="crm-value" id="crmTipo">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Seção: Faixas Etárias -->
+                            <div class="crm-section">
+                                <h3 class="crm-section-title">👥 Faixas Etárias</h3>
+                                <div class="crm-faixas-list" id="crmFaixasList">
+                                </div>
+                            </div>
+                            
+                            <!-- Seção: Planos Selecionados -->
+                            <div class="crm-section">
+                                <h3 class="crm-section-title">💰 Planos Selecionados</h3>
+                                <div class="crm-planos-list" id="crmPlanosList">
+                                    <!-- Preenchido dinamicamente -->
+                                </div>
+                            </div>
+                            
+                            <!-- Seção: Informações de Registro -->
+                            <div class="crm-section">
+                                <h3 class="crm-section-title">📅 Informações de Registro</h3>
+                                <div class="crm-grid">
+                                    <div class="crm-field">
+                                        <span class="crm-label">Vendedor</span>
+                                        <span class="crm-value" id="crmVendedor">-</span>
+                                    </div>
+                                    <div class="crm-field">
+                                        <span class="crm-label">Data e Hora</span>
+                                        <span class="crm-value" id="crmDataHora">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Footer com Botões -->
+                        <div class="modal-crm-footer">
+                            <button class="btn-modal-descartar" onclick="descartarPropostaModal()">
+                                <i class="fas fa-times"></i> Descartar
+                            </button>
+                            <button class="btn-modal-adicionar" onclick="adicionarPropostaCRM()">
+                                <i class="fas fa-plus-circle"></i> Adicionar ao CRM
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+    function preencherDadosVendedor() {
+        const nome = localStorage.getItem('vendedorNome');
+        const email = localStorage.getItem('vendedorEmail');
+        const telefone = localStorage.getItem('vendedorTelefone');
+        
+        document.getElementById('nomeVendedor').textContent = nome || 'Não informado';
+        document.getElementById('telefoneVendedor').textContent = telefone || 'Não informado';
+        document.getElementById('previewVendedor').textContent = nome || 'Não informado';
+        document.getElementById('previewEmail').textContent = email || 'Não informado';
+        document.getElementById('previewTelefone').textContent = telefone || 'Não informado';
+    }
+    
+    preencherDadosVendedor();
+</script>
+
+    <!-- ⭐ FIREBASE SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+
+    <!-- ⭐ INICIALIZAÇÃO FIREBASE -->
+    <script src="../Shared/src/firebase-init.js"></script>
+
+    <!-- ⭐ SERVIÇOS COMPARTILHADOS -->
+    <script src="../Shared/src/auth-service.js"></script>
+    <script src="../Shared/src/database-service.js"></script>
+    <script src="../Shared/src/constants.js"></script>
+    <script src="../Shared/src/formatters.js"></script>
+    <script src="../Shared/src/validators.js"></script>
+    <script src="../Shared/src/vendedor-service.js"></script>
+
+    <!-- ⭐ LOADING SERVICE -->
+    <script src="js/loading-service.js"></script>
+
+    <!-- ⭐ SCRIPTS DO COTADOR -->
+    <script src="js/config.js"></script>
+    <script src="js/vendors.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/cities.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/regions.js"></script>
+    <script src="js/plans.js"></script>
+    <script src="js/ages.js"></script>
+    <script src="js/comparison.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/cotador-service.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/sales.js"></script>
+    <script src="js/debug.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>

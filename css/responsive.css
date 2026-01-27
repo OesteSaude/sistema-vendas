@@ -1,0 +1,336 @@
+/* ===== MOBILE FIRST (até 640px) ===== */
+@media (max-width: 640px) {
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    .max-w-7xl {
+        max-width: 100% !important;
+        padding: 0 12px !important;
+    }
+
+    /* HEADER */
+    .oeste-header {
+        padding: 12px 16px !important;
+    }
+
+    .oeste-header .flex {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+
+    .oeste-logo {
+        height: 40px !important;
+    }
+
+    /* TABS */
+    .oeste-tabs-container {
+        margin-bottom: 12px !important;
+    }
+
+    .oeste-tab-button {
+        padding: 10px 12px !important;
+        font-size: 12px !important;
+        flex: 1;
+        text-align: center;
+    }
+
+    .oeste-tab-button span {
+        display: none;
+    }
+
+    .oeste-tab-button i {
+        display: block;
+        font-size: 18px;
+    }
+
+    /* CARDS */
+    .oeste-card {
+        padding: 12px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .oeste-card-title {
+        font-size: 14px !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* GRID DE REGIÕES */
+    .regioes-grid-container {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .regiao-coluna {
+        gap: 8px !important;
+    }
+
+    .btn-regiao-colorido {
+        padding: 12px !important;
+        font-size: 13px !important;
+        min-height: 44px;
+    }
+
+    /* BOTÕES DE TIPO */
+    .botoes-container {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .btn-tipo {
+        padding: 12px !important;
+        font-size: 13px !important;
+        width: 100% !important;
+        min-height: 44px;
+    }
+
+    /* INPUTS */
+    .compact-form-group {
+        flex-direction: column !important;
+        gap: 8px !important;
+        padding: 10px !important;
+    }
+
+    .compact-form-group label {
+        min-width: auto !important;
+        width: 100%;
+    }
+
+    .compact-form-group select,
+    .compact-form-group input {
+        width: 100% !important;
+    }
+
+    /* PLANOS GRID */
+    .planos-grid-compact {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+
+    .plano-checkbox-label {
+        padding: 10px !important;
+    }
+
+    /* FAIXAS ETÁRIAS */
+    .faixa-inline-container {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+
+    .faixa-inline-item {
+        padding: 10px !important;
+        gap: 8px !important;
+    }
+
+    .faixa-inline-item input[type="number"] {
+        width: 50px !important;
+    }
+
+    /* TABELA */
+    #tabelaComparativa {
+        overflow-x: auto !important;
+        margin-bottom: 12px !important;
+    }
+
+    #tabelaComparativa table {
+        font-size: 10px !important;
+        min-width: 100%;
+    }
+
+    #tabelaComparativa th,
+    #tabelaComparativa td {
+        padding: 4px 2px !important;
+    }
+
+    #tabelaComparativa th:first-child,
+    #tabelaComparativa td:first-child {
+        min-width: 80px;
+        position: sticky;
+        left: 0;
+        background: white;
+        z-index: 1;
+    }
+
+    /* RESULTADO GRID */
+    .grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    /* BOTÕES */
+    .oeste-btn-primary,
+    .oeste-btn-secondary {
+        width: 100% !important;
+        padding: 14px !important;
+        font-size: 14px !important;
+        min-height: 44px;
+    }
+
+    .flex.gap-3 {
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .flex-1 {
+        width: 100% !important;
+    }
+
+    /* LOGIN */
+    #loginScreen {
+        padding: 12px !important;
+    }
+
+    .bg-white.rounded-2xl {
+        border-radius: 12px !important;
+        padding: 16px !important;
+    }
+
+    .oeste-logo-login {
+        height: 50px !important;
+    }
+
+    /* TEXTO */
+    h1 {
+        font-size: 18px !important;
+    }
+
+    h2 {
+        font-size: 16px !important;
+    }
+
+    h3 {
+        font-size: 14px !important;
+    }
+
+    p {
+        font-size: 13px !important;
+    }
+
+    /* RESUMO */
+    #resumoSelecao {
+        padding: 12px !important;
+    }
+
+    /* LOADING */
+    .loading-spinner {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+
+/* ===== TABLET (641px até 1024px) ===== */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .regioes-grid-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .planos-grid-compact {
+        grid-template-columns: 1fr !important;
+    }
+
+    .faixa-inline-container {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* ===== IMPRESSÃO ===== */
+@media print {
+    body {
+        background: white !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100% !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    @page {
+        size: A4;
+        margin: 0mm !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .print-only {
+        display: block !important;
+    }
+
+    #previewCard {
+        box-shadow: none !important;
+        padding: 5mm !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    #tabelaComparativa table {
+        font-size: 9px !important;
+    }
+
+    #tabelaComparativa th {
+        padding: 4px 3px !important;
+        font-size: 9px !important;
+    }
+
+    #tabelaComparativa td {
+        padding: 3px 2px !important;
+        font-size: 9px !important;
+    }
+
+    #tabelaComparativa .row-total td {
+        font-size: 10px !important;
+        padding: 6px 4px !important;
+    }
+
+    #tabelaComparativa .melhor-valor::before {
+        font-size: 16px !important;
+        top: -5px !important;
+        right: -5px !important;
+    }
+
+    #previewCard > div:first-child {
+        margin-bottom: 5px !important;
+    }
+
+    #previewCard > div:nth-child(2) {
+        margin-bottom: 5px !important;
+    }
+
+    #previewCard > div:nth-child(3) {
+        margin-bottom: 5px !important;
+    }
+
+    #printImageContainer {
+        display: block !important;
+        page-break-before: always !important;
+        page-break-after: avoid !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden;
+    }
+
+    #imagemExplicativa {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        margin: 0 !important;
+        padding: 0!important;
+        display: block !important;
+    }
+}
