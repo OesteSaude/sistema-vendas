@@ -3,7 +3,6 @@
             return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         };
 
-        const obterDadosVendedor = (nome) => APP_DATA.vendedores[nome] || {};
         const obterFaixaInfo = (numero) => APP_DATA.faixas[numero] || {};
         const obterRegiaoData = (regiao) => APP_DATA.regioes[regiao] || {};
 
@@ -359,5 +358,6 @@ document.addEventListener('keydown', (e) => {
         });
     }
 });
+
 
 console.log('%c✅ Listener de ESC carregado', 'color: #16a34a; font-weight: bold;');
