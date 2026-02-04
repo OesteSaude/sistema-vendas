@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página em Manutenção - HUB de Cotação</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #003D58 0%, #00A8B0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 60px 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #003D58 0%, #00A8B0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        h1 {
+            color: #003D58;
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 18px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .maintenance-box {
+            background: #fef3c7;
+            border: 2px solid #fbbf24;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .maintenance-box h3 {
+            color: #92400e;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .maintenance-box p {
+            color: #78350f;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        .maintenance-box ul {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .maintenance-box li {
+            color: #78350f;
+            font-size: 14px;
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .maintenance-box li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #003D58 0%, #00A8B0 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 61, 88, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #003D58;
+            border: 2px solid #003D58;
+        }
+
+        .btn-secondary:hover {
+            background: #003D58;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .countdown {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f0f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #00A8B0;
+        }
+
+        .countdown p {
+            color: #003D58;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .countdown-timer {
+            font-size: 24px;
+            font-weight: 900;
+            color: #00A8B0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 20px;
+            }
+
+            .error-code {
+                font-size: 80px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🔧</div>
+        <div class="error-code">404</div>
+        
+        <h1>Página em Manutenção</h1>
+        <p class="subtitle">
+            Estamos atualizando o HUB de Cotação com novas funcionalidades e melhorias! 
+            <br><strong>Em breve estaremos de volta.</strong>
+        </p>
+
+        <div class="maintenance-box">
+            <h3>⚙️ O que está sendo feito:</h3>
+            <ul>
+                <li>Otimização de performance</li>
+                <li>Correção de bugs identificados</li>
+                <li>Novas funcionalidades</li>
+                <li>Melhorias na interface</li>
+            </ul>
+        </div>
+
+        <div class="countdown">
+            <p>⏱️ Retorno estimado em:</p>
+            <div class="countdown-timer" id="countdown">--:--:--</div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="recarregar()">
+                🔄 Tentar Novamente
+            </button>
+            <a href="https://www.oestesaude.com.br" class="btn btn-secondary">
+                🌐 Ir para Site Principal
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // ⭐ CONTADOR REGRESSIVO
+        function iniciarContador() {
+            // Define o tempo de retorno (ex: 2 horas = 7200 segundos)
+            let tempoRestante = 900; // 2 horas
+
+            function atualizarContador() {
+                const horas = Math.floor(tempoRestante / 3600);
+                const minutos = Math.floor((tempoRestante % 3600) / 60);
+                const segundos = tempoRestante % 60;
+
+                const formatado = `${String(horas).padStart(2, '0')}:${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+                document.getElementById('countdown').textContent = formatado;
+
+                if (tempoRestante > 0) {
+                    tempoRestante--;
+                    setTimeout(atualizarContador, 1000);
+                } else {
+                    document.getElementById('countdown').textContent = '00:00:00';
+                    // Recarregar página automaticamente
+                    location.reload();
+                }
+            }
+
+            atualizarContador();
+        }
+
+        // ⭐ FUNÇÃO PARA RECARREGAR
+        function recarregar() {
+            location.reload();
+        }
+
+        // ⭐ INICIAR CONTADOR AO CARREGAR
+        window.addEventListener('load', iniciarContador);
+
+        // ⭐ LOG NO CONSOLE
+        console.log('%c🔧 Página em manutenção', 'color: #00A8B0; font-weight: bold; font-size: 16px;');
+        console.log('%c⏱️ Retorno estimado em 2 horas', 'color: #003D58; font-weight: bold;');
+    </script>
+</body>
+</html>
