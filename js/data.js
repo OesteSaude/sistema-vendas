@@ -267,13 +267,13 @@ const APP_DATA = {
             requerTaxa: true,
             imagens: {
                 "Coletivo por Adesão": {
-                    "Premium (IV, III e II)": "https://i.imgur.com/iWX99U5.jpeg",
-                    "Premium (IV e III)": "https://i.imgur.com/41fg8zN.jpeg",
-                    "Premium (IV e II)": "https://i.imgur.com/MzgehfJ.jpeg",
-                    "Premium (IV)": "https://i.imgur.com/LQHiIBk.jpeg",
-                    "Premium (III e II)": "https://i.imgur.com/T8R1CW5.jpeg",
-                    "Premium (III)": "https://i.imgur.com/opIWSKn.jpeg",
-                    "Premium (II)": "https://i.imgur.com/EQweEKl.jpeg"
+                    "Premium (IV, III e II)": "https://i.imgur.com/PcSR6An.jpeg",
+                    "Premium (IV e III)": "https://i.imgur.com/MqRNsKz.jpeg",
+                    "Premium (IV e II)": "https://i.imgur.com/liO39f9.jpeg",
+                    "Premium (IV)": "https://i.imgur.com/Sg2rgoC.jpeg",
+                    "Premium (III e II)": "https://i.imgur.com/9lC3Ly5.jpeg",
+                    "Premium (III)": "https://i.imgur.com/o4PiQb0.jpeg",
+                    "Premium (II)": "https://i.imgur.com/35olPDE.jpeg"
                 }
             }
         },
@@ -321,13 +321,13 @@ const APP_DATA = {
             requerTaxa: true,
             imagens: {
                 "Coletivo por Adesão": {
-                    "Premium (IV, III e II)": "https://i.imgur.com/9asID7E.jpeg",
-                    "Premium (IV e III)": "https://i.imgur.com/RzJtrLV.jpeg",
-                    "Premium (IV e II)": "https://i.imgur.com/H6uQKLc.jpeg",
-                    "Premium (IV)": "https://i.imgur.com/4xo1vMp.jpeg",
-                    "Premium (III e II)": "https://i.imgur.com/d0YnS6f.jpeg",
-                    "Premium (III)": "https://i.imgur.com/yAG8ICD.jpeg",
-                    "Premium (II)": "https://i.imgur.com/9qEZo8V.jpeg"
+                    "Premium (IV, III e II)": "https://i.imgur.com/w1An0Tx.jpeg",
+                    "Premium (IV e III)": "https://i.imgur.com/mWBWg8L.jpeg",
+                    "Premium (IV e II)": "https://i.imgur.com/E78fdlE.jpeg",
+                    "Premium (IV)": "https://i.imgur.com/0K4G6qp.jpeg",
+                    "Premium (III e II)": "https://i.imgur.com/hlURjNz.jpeg",
+                    "Premium (III)": "https://i.imgur.com/j0ndycg.jpeg",
+                    "Premium (II)": "https://i.imgur.com/vZuARKn.jpeg"
                 }
             }
         },
@@ -339,13 +339,13 @@ const APP_DATA = {
             requerTaxa: true,
             imagens: {
                 "Coletivo por Adesão": {
-                    "Premium (IV, III e II)": "https://i.imgur.com/945Fn47.jpeg",
-                    "Premium (IV e III)": "https://i.imgur.com/AqOp0E4.jpeg",
-                    "Premium (IV e II)": "https://i.imgur.com/Z235Vuw.jpeg",
-                    "Premium (IV)": "https://i.imgur.com/rWpo2Py.jpeg",
-                    "Premium (III e II)": "https://i.imgur.com/oN7eGhx.jpeg",
-                    "Premium (III)": "https://i.imgur.com/G1v7d4q.jpeg",
-                    "Premium (II)": "https://i.imgur.com/loRUj6Y.jpeg"
+                    "Premium (IV, III e II)": "https://i.imgur.com/XFBCV14.jpeg",
+                    "Premium (IV e III)": "https://i.imgur.com/PDNTUd1.jpeg",
+                    "Premium (IV e II)": "https://i.imgur.com/cu9pSXu.jpeg",
+                    "Premium (IV)": "https://i.imgur.com/6lUlMW8.jpeg",
+                    "Premium (III e II)": "https://i.imgur.com/8RqX2GW.jpeg",
+                    "Premium (III)": "https://i.imgur.com/ugZ34Pu.jpeg",
+                    "Premium (II)": "https://i.imgur.com/PkI4AyI.jpeg"
                 }
             }
         }
