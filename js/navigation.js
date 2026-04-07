@@ -74,7 +74,7 @@ function gerarBotoesRegiao() {
         'Oeste': {
             titulo: 'Oeste Saúde',
             classe: 'regiao-oeste',
-            regioes: ['Oeste Paulista (SP)', 'Campo Grande (MS)', 'Dourados (MS)']
+            regioes: ['Oeste Paulista (SP)', 'Dourados (MS)']
         },
         'Corpe': {
             titulo: 'Corpe',
