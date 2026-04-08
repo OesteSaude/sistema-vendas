@@ -79,12 +79,12 @@ function gerarBotoesRegiao() {
         'Corpe': {
             titulo: 'Corpe',
             classe: 'regiao-corpe',
-            regioes: ['Corpe (SP)', 'Corpe (MS)', 'Corpe (DRD)']
+            regioes: ['Corpe (SP)', 'Corpe (DRD)']
         },
         'Lancers': {
             titulo: 'Lancers',
             classe: 'regiao-lancers',
-            regioes: ['Lancers (SP)', 'Lancers (MS)', 'Lancers (DRD)']
+            regioes: ['Lancers (SP)', 'Lancers (DRD)']
         }
     };
 
