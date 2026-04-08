@@ -31,8 +31,8 @@ const APP_DATA = {
     regioes: {
         "Oeste Paulista (SP)": {
             tipos: {
-                "Empresarial (até 29 vidas)": ["Premium I (20%)", "Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro I (20%)", "Exclusivo III Empresarial até 29 vidas (40%)", "Infantil Tabela Fixa (R$ 353,53)"],
-                "Empresarial (30 vidas ou +)": ["Premium I (20%)", "Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro I (20%)", "Exclusivo III Empresarial 30 vidas ou + (40%)", "Infantil Tabela Fixa (R$ 353,53)"],
+                "Empresarial (até 29 vidas)": ["Premium I (20%)", "Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro I (20%)", "Exclusivo III Empresarial até 29 vidas (40%)"],
+                "Empresarial (30 vidas ou +)": ["Premium I (20%)", "Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro I (20%)", "Exclusivo III Empresarial 30 vidas ou + (40%)"],
                 "Tabela Referência": ["Premium III (40%)"]
             },
             tipoColor: 'premium',
