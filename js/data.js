@@ -233,7 +233,7 @@ const APP_DATA = {
         },
         "Corpe (SP)": {
             tipos: {
-                "Coletivo por Adesão": ["Premium I (20%)", "Premium II (30%)", "Premium III (40%)", "Premium Ouro I (20%)"]
+                "Coletivo por Adesão": ["Premium I (20%)", "Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro I (20%)"]
             },
             tipoColor: 'corpe',
             requerTaxa: true,
