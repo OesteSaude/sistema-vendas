@@ -74,17 +74,17 @@ function gerarBotoesRegiao() {
         'Oeste': {
             titulo: 'Oeste Saúde',
             classe: 'regiao-oeste',
-            regioes: ['Oeste Paulista (SP)', 'Campo Grande (MS)', 'Dourados (MS)']
+            regioes: ['Oeste Paulista (SP)', 'Dourados (MS)']
         },
         'Corpe': {
             titulo: 'Corpe',
             classe: 'regiao-corpe',
-            regioes: ['Corpe (SP)', 'Corpe (MS)', 'Corpe (DRD)']
+            regioes: ['Corpe (SP)', 'Corpe (DRD)']
         },
         'Lancers': {
             titulo: 'Lancers',
             classe: 'regiao-lancers',
-            regioes: ['Lancers (SP)', 'Lancers (MS)', 'Lancers (DRD)']
+            regioes: ['Lancers (SP)', 'Lancers (DRD)']
         }
     };
 
