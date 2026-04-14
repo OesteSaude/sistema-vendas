@@ -416,12 +416,6 @@
             color: #16a34a;
         }
 
-        #tabelaComparativa .row-taxa td {
-            background: #fed7aa;
-            font-weight: 700;
-            color: #ea580c;
-        }
-
         #tabelaComparativa .row-total td {
             background: var(--oeste-turqueza) 100%;
             color: white;

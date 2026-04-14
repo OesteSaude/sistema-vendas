@@ -322,113 +322,118 @@ function mudarParaIndividual() {
         }
 
         function renderizarResultado() {
-			const { vendedor, regiao, tipo, cliente, faixas, resultados, taxaAdm } = comparacaoAtual;
-			
-			// ⭐ USAR O SERVICE PARA BUSCAR DADOS DO VENDEDOR
-			const dadosContato = VENDEDOR_SERVICE.obterDadosVendedorLocal(vendedor);
-			
-			nomeClienteInput = document.getElementById('nomeCliente')?.value || 'Não informado';
-			
-			console.log('%c👤 Dados do vendedor:', 'color: #0066cc; font-weight: bold;');
-			console.log('Nome:', dadosContato.nome);
-			console.log('Email:', dadosContato.email);
-			console.log('Telefone:', dadosContato.telefone);
-			
-			document.getElementById('previewVendedor').textContent = dadosContato.nome;
-			document.getElementById('previewTelefone').textContent = dadosContato.telefone;
-			document.getElementById('previewEmail').textContent = dadosContato.email;
-            document.getElementById('previewResultadoRegiao').textContent = regiao;
-            document.getElementById('resultadoCidade').textContent = comparacaoAtual.cidade;
-            document.getElementById('previewResultadoTipo').textContent = tipo;
-            document.getElementById('previewResultadoCliente').textContent = nomeClienteInput;
-            document.getElementById('previewResultadoClientePrint').textContent = cliente ? `Cliente: ${cliente}` : '';
+	const { vendedor, regiao, tipo, cliente, faixas, resultados, taxaAdm } = comparacaoAtual;
+	
+	const CORES_ADM = {
+		'CORPE': '#DC2626',
+		'LANCERS': '#EA580C'
+	};
+	
+	// ⭐ USAR O SERVICE PARA BUSCAR DADOS DO VENDEDOR
+	const dadosContato = VENDEDOR_SERVICE.obterDadosVendedorLocal(vendedor);
+	
+	nomeClienteInput = document.getElementById('nomeCliente')?.value || 'Não informado';
+	
+	console.log('%c👤 Dados do vendedor:', 'color: #0066cc; font-weight: bold;');
+	console.log('Nome:', dadosContato.nome);
+	console.log('Email:', dadosContato.email);
+	console.log('Telefone:', dadosContato.telefone);
+	
+	document.getElementById('previewVendedor').textContent = dadosContato.nome;
+	document.getElementById('previewTelefone').textContent = dadosContato.telefone;
+	document.getElementById('previewEmail').textContent = dadosContato.email;
+    document.getElementById('previewResultadoRegiao').textContent = regiao;
+    document.getElementById('resultadoCidade').textContent = comparacaoAtual.cidade;
+    document.getElementById('previewResultadoTipo').textContent = tipo;
+    document.getElementById('previewResultadoCliente').textContent = nomeClienteInput;
+    document.getElementById('previewResultadoClientePrint').textContent = cliente ? `Cliente: ${cliente}` : '';
 
+    const agora = new Date();
+    document.getElementById('dataComparacao').textContent = agora.toLocaleDateString('pt-BR', {
+        day: '2-digit', month: 'long', year: 'numeric'
+    }) + ' às ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-            const agora = new Date();
-            document.getElementById('dataComparacao').textContent = agora.toLocaleDateString('pt-BR', {
-                day: '2-digit', month: 'long', year: 'numeric'
-            }) + ' às ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const resultadosSemOdonto = resultados.filter(r => !r.plano.includes('Odontológico'));
+    const menorValor = resultadosSemOdonto.length > 0 ? Math.min(...resultadosSemOdonto.map(r => r.valorFinal)) : Math.min(...resultados.map(r => r.valorFinal));
+    
+    let tabelaHTML = '<table><thead><tr>';
+    tabelaHTML += '<th>Faixa Etária</th><th>Qtd</th>';
+    tabelaHTML += resultados.map(r => {
+        const isOdonto = r.plano.includes('Odontológico');
+        const classe = isOdonto ? 'class="col-odontologico"' : '';
+        return `<th ${classe}>${normalizarNomePlanoExibicao(r.plano, tipo)}</th>`;
+    }).join('');
+    tabelaHTML += '</tr></thead><tbody>';
 
-            // Filtra apenas planos que NÃO são Odontológico para encontrar o melhor custo-benefício
-            const resultadosSemOdonto = resultados.filter(r => !r.plano.includes('Odontológico'));
-            const menorValor = resultadosSemOdonto.length > 0 ? Math.min(...resultadosSemOdonto.map(r => r.valorFinal)) : Math.min(...resultados.map(r => r.valorFinal));
-            
-            let tabelaHTML = '<table><thead><tr>';
-            tabelaHTML += '<th>Faixa Etária</th><th>Qtd</th>';
-            tabelaHTML += resultados.map(r => {
-                const isOdonto = r.plano.includes('Odontológico');
-                const classe = isOdonto ? 'class="col-odontologico"' : '';
-                return `<th ${classe}>${normalizarNomePlanoExibicao(r.plano, tipo)}</th>`;
-            }).join('');
-            tabelaHTML += '</tr></thead><tbody>';
+    const faixasOrdenadas = faixas.sort((a, b) => {
+        const ordemFaixas = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10'];
+        return ordemFaixas.indexOf(a.chave) - ordemFaixas.indexOf(b.chave);
+    });
 
-            const faixasOrdenadas = faixas.sort((a, b) => {
-                const ordemFaixas = ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10'];
-                return ordemFaixas.indexOf(a.chave) - ordemFaixas.indexOf(b.chave);
-            });
+    faixasOrdenadas.forEach(f => {
+        tabelaHTML += '<tr>';
+        tabelaHTML += `<td>${f.nome}</td><td>${f.qtd}</td>`;
+        tabelaHTML += resultados.map(r => {
+            const isOdonto = r.plano.includes('Odontológico');
+            const classe = isOdonto ? 'class="col-odontologico"' : '';
+            const valorUnitario = obterValorPlano(regiao, tipo, r.plano, f.chave);
+            return `<td ${classe}>${formatarMoeda(valorUnitario)}</td>`;
+        }).join('');
+        tabelaHTML += '</tr>';
+    });
 
-            faixasOrdenadas.forEach(f => {
-                tabelaHTML += '<tr>';
-                tabelaHTML += `<td>${f.nome}</td><td>${f.qtd}</td>`;
-                tabelaHTML += resultados.map(r => {
-                    const isOdonto = r.plano.includes('Odontológico');
-                    const classe = isOdonto ? 'class="col-odontologico"' : '';
-                    const valorUnitario = obterValorPlano(regiao, tipo, r.plano, f.chave);
-                    return `<td ${classe}>${formatarMoeda(valorUnitario)}</td>`;
-                }).join('');
-                tabelaHTML += '</tr>';
-            });
+    tabelaHTML += '<tr class="row-subtotal"><td colspan="2">SUBTOTAL</td>';
+    tabelaHTML += resultados.map(r => {
+        const isOdonto = r.plano.includes('Odontológico');
+        const classe = isOdonto ? 'class="col-odontologico"' : '';
+        return `<td ${classe}>${formatarMoeda(r.subtotal)}</td>`;
+    }).join('');
+    tabelaHTML += '</tr>';
 
-            tabelaHTML += '<tr class="row-subtotal"><td colspan="2">SUBTOTAL</td>';
-            tabelaHTML += resultados.map(r => {
-                const isOdonto = r.plano.includes('Odontológico');
-                const classe = isOdonto ? 'class="col-odontologico"' : '';
-                return `<td ${classe}>${formatarMoeda(r.subtotal)}</td>`;
-            }).join('');
-            tabelaHTML += '</tr>';
+    if (resultados.some(r => r.descontoFamiliar > 0)) {
+        tabelaHTML += '<tr class="row-desconto"><td colspan="2">- DESCONTO FAMILIAR (10%)</td>';
+        tabelaHTML += resultados.map(r => {
+            const isOdonto = r.plano.includes('Odontológico');
+            const classe = isOdonto ? 'class="col-odontologico"' : '';
+            return `<td ${classe}>- ${formatarMoeda(r.descontoFamiliar)}</td>`;
+        }).join('');
+        tabelaHTML += '</tr>';
+    }
 
-            if (resultados.some(r => r.descontoFamiliar > 0)) {
-                tabelaHTML += '<tr class="row-desconto"><td colspan="2">- DESCONTO FAMILIAR (10%)</td>';
-                tabelaHTML += resultados.map(r => {
-                    const isOdonto = r.plano.includes('Odontológico');
-                    const classe = isOdonto ? 'class="col-odontologico"' : '';
-                    return `<td ${classe}>- ${formatarMoeda(r.descontoFamiliar)}</td>`;
-                }).join('');
-                tabelaHTML += '</tr>';
-            }
+    if (resultados.some(r => r.descontoAdicional > 0)) {
+        const primeiroResultadoComDesconto = resultados.find(r => r.descontoAdicional > 0);
+        const nomeDesconto = primeiroResultadoComDesconto.descontoAdicionalTipo === 'OAB' ? 'DESCONTO OAB (15%)' : 'DESCONTO ESTUDANTE (20%)';
+        tabelaHTML += `<tr class="row-desconto"><td colspan="2">- ${nomeDesconto}</td>`;
+        tabelaHTML += resultados.map(r => {
+            const isOdonto = r.plano.includes('Odontológico');
+            const classe = isOdonto ? 'class="col-odontologico"' : '';
+            return `<td ${classe}>- ${formatarMoeda(r.descontoAdicional)}</td>`;
+        }).join('');
+        tabelaHTML += '</tr>';
+    }
 
-            if (resultados.some(r => r.descontoAdicional > 0)) {
-                const primeiroResultadoComDesconto = resultados.find(r => r.descontoAdicional > 0);
-                const nomeDesconto = primeiroResultadoComDesconto.descontoAdicionalTipo === 'OAB' ? 'DESCONTO OAB (15%)' : 'DESCONTO ESTUDANTE (20%)';
-                tabelaHTML += `<tr class="row-desconto"><td colspan="2">- ${nomeDesconto}</td>`;
-                tabelaHTML += resultados.map(r => {
-                    const isOdonto = r.plano.includes('Odontológico');
-                    const classe = isOdonto ? 'class="col-odontologico"' : '';
-                    return `<td ${classe}>- ${formatarMoeda(r.descontoAdicional)}</td>`;
-                }).join('');
-                tabelaHTML += '</tr>';
-            }
+    if (taxaAdm > 0) {
+        const adm = regiao.includes('Corpe') ? 'CORPE' : (regiao.includes('Lancers') ? 'LANCERS' : '');
+        const corTaxa = CORES_ADM[adm];
+        tabelaHTML += `<tr class="row-taxa" style="background-color: ${corTaxa}; color: white;"><td colspan="2">TAXA ADMINISTRADORA - ${adm}</td>`;
+        tabelaHTML += resultados.map(r => {
+            const isOdonto = r.plano.includes('Odontológico');
+            const classe = isOdonto ? 'class="col-odontologico"' : '';
+            return `<td ${classe}>+ ${formatarMoeda(r.taxaAdm)}</td>`;
+        }).join('');
+        tabelaHTML += '</tr>';
+    }
 
-            if (taxaAdm > 0) {
-                tabelaHTML += '<tr class="row-taxa"><td colspan="2">TAXA ADMINISTRADORA</td>';
-                tabelaHTML += resultados.map(r => {
-                    const isOdonto = r.plano.includes('Odontológico');
-                    const classe = isOdonto ? 'class="col-odontologico"' : '';
-                    return `<td ${classe}>+ ${formatarMoeda(r.taxaAdm)}</td>`;
-                }).join('');
-                tabelaHTML += '</tr>';
-            }
+    tabelaHTML += '<tr class="row-total"><td colspan="2">VALOR TOTAL</td>';
+    tabelaHTML += resultados.map(r => {
+        const isOdonto = r.plano.includes('Odontológico');
+        const isMelhor = r.valorFinal === menorValor && !isOdonto;
+        const classe = isOdonto ? 'class="col-odontologico' + (isMelhor ? ' melhor-valor' : '') + '"' : (isMelhor ? 'class="melhor-valor"' : '');
+        return `<td ${classe}>${formatarMoeda(r.valorFinal)}</td>`;
+    }).join('');
+    tabelaHTML += '</tr></tbody></table>';
 
-            tabelaHTML += '<tr class="row-total"><td colspan="2">VALOR TOTAL</td>';
-            tabelaHTML += resultados.map(r => {
-                const isOdonto = r.plano.includes('Odontológico');
-                const isMelhor = r.valorFinal === menorValor && !isOdonto; // Odontológico nunca é melhor
-                const classe = isOdonto ? 'class="col-odontologico' + (isMelhor ? ' melhor-valor' : '') + '"' : (isMelhor ? 'class="melhor-valor"' : '');
-                return `<td ${classe}>${formatarMoeda(r.valorFinal)}</td>`;
-            }).join('');
-            tabelaHTML += '</tr></tbody></table>';
-
-            tabelaHTML += `
+    tabelaHTML += `
                 <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border: 2px solid #fbbf24; border-radius: 8px; text-align: center;">
                     <p style="font-size: 14px; font-weight: 700; color: #92400e; margin: 0;">
                         <i class="fas fa-star" style="color: #fbbf24; margin-right: 8px;"></i>
@@ -437,11 +442,11 @@ function mudarParaIndividual() {
                 </div>
             `;
 
-            document.getElementById('tabelaComparativa').innerHTML = tabelaHTML;
-                setTimeout(() => {
-                    mostrarModalCRM();
-                }, 500);
-        }
+    document.getElementById('tabelaComparativa').innerHTML = tabelaHTML;
+    setTimeout(() => {
+        mostrarModalCRM();
+    }, 500);
+}
 function mostrarModalCRM() {
     console.log('%c📊 Mostrando modal de CRM...', 'color: #00A8B0; font-weight: bold;');
     console.log('%c📦 comparacaoAtual:', 'color: #0066cc; font-weight: bold;', comparacaoAtual);
