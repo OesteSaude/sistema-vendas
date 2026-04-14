@@ -1,39 +1,48 @@
-        async function copiarParaWhatsApp() {
-            if (!comparacaoAtual.resultados) {
-                alert('⚠️ Gere a comparação primeiro!');
-                return;
-            }
+       async function copiarParaWhatsApp() {
+    if (!comparacaoAtual.resultados) {
+        alert('⚠️ Gere a comparação primeiro!');
+        return;
+    }
 
-            const btn = document.getElementById('btnWhatsAppText');
-            const originalText = btn.textContent;
+    const btn = document.getElementById('btnWhatsAppText');
+    const originalText = btn.textContent;
 
+    try {
+        btn.textContent = 'Copiando...';
+
+        // 1. O alvo agora é o card completo
+        const elementoAlvo = document.getElementById('previewCard');
+
+        // 2. Tiramos o print
+        const canvas = await html2canvas(elementoAlvo, {
+            scale: 3,
+            backgroundColor: '#ffffff',
+            useCORS: true,
+            logging: false,
+            // ESSA LINHA É A CHAVE: Ela remove os botões da imagem final
+            ignoreElements: (el) => el.classList.contains('no-print') || el.tagName === 'BUTTON'
+        });
+
+        canvas.toBlob(async (blob) => {
             try {
-                btn.textContent = 'Copiando...';
-                const tabela = document.querySelector('#tabelaComparativa table');
-                const canvas = await html2canvas(tabela, {
-                    scale: 3,
-                    backgroundColor: '#ffffff',
-                    logging: false,
-                    useCORS: true
-                });
-
-                canvas.toBlob(async (blob) => {
-                    try {
-                        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-                        btn.textContent = '✅ Copiado!';
-                        setTimeout(() => { btn.textContent = originalText; }, 2000);
-                    } catch (err) {
-                        console.error('Erro ao copiar:', err);
-                        alert('❌ Erro ao copiar. Tente novamente!');
-                        btn.textContent = originalText;
-                    }
-                }, 'image/png');
-            } catch (error) {
-                console.error('Erro ao capturar tabela:', error);
-                alert('❌ Erro ao capturar tabela. Tente novamente!');
+                await navigator.clipboard.write([
+                    new ClipboardItem({ 'image/png': blob })
+                ]);
+                btn.textContent = '✅ Copiado!';
+                setTimeout(() => { btn.textContent = originalText; }, 2000);
+            } catch (err) {
+                console.error('Erro ao copiar:', err);
+                alert('❌ Erro ao copiar imagem.');
                 btn.textContent = originalText;
             }
-        }
+        }, 'image/png');
+
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('❌ Erro ao gerar captura.');
+        btn.textContent = originalText;
+    }
+}
 
 function imprimirPDF() {
     console.log('%c🖨️ INICIANDO VALIDAÇÃO DE IMPRESSÃO', 'color: #0066cc; font-weight: bold; font-size: 14px;');
