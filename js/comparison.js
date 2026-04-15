@@ -434,12 +434,15 @@ function mudarParaIndividual() {
     tabelaHTML += '</tr></tbody></table>';
 
     tabelaHTML += `
-                <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border: 2px solid #fbbf24; border-radius: 8px; text-align: center;">
+            <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border: 2px solid #fbbf24; border-radius: 8px; text-align: center;">
                     <p style="font-size: 14px; font-weight: 700; color: #92400e; margin: 0;">
                         <i class="fas fa-star" style="color: #fbbf24; margin-right: 8px;"></i>
                         Melhor Custo-Benefício
                     </p>
                 </div>
+                <p style="font-size: 11px; color: #6b7280; padding: 20px; text-align: center; margin-top: 5px; margin-bottom: 12px; font-style: italic; font-family: sans-serif;">
+                    *Proposta válida por 20 dias a partir da data de geração.
+                </p>
             `;
 
     document.getElementById('tabelaComparativa').innerHTML = tabelaHTML;

@@ -10,17 +10,14 @@
     try {
         btn.textContent = 'Copiando...';
 
-        // 1. O alvo agora é o card completo
-        const elementoAlvo = document.getElementById('previewCard');
+        // AJUSTE: Voltamos a selecionar apenas a div da tabela
+        const tabela = document.querySelector('#tabelaComparativa');
 
-        // 2. Tiramos o print
-        const canvas = await html2canvas(elementoAlvo, {
+        const canvas = await html2canvas(tabela, {
             scale: 3,
             backgroundColor: '#ffffff',
-            useCORS: true,
             logging: false,
-            // ESSA LINHA É A CHAVE: Ela remove os botões da imagem final
-            ignoreElements: (el) => el.classList.contains('no-print') || el.tagName === 'BUTTON'
+            useCORS: true
         });
 
         canvas.toBlob(async (blob) => {
@@ -28,18 +25,19 @@
                 await navigator.clipboard.write([
                     new ClipboardItem({ 'image/png': blob })
                 ]);
+                
                 btn.textContent = '✅ Copiado!';
                 setTimeout(() => { btn.textContent = originalText; }, 2000);
             } catch (err) {
                 console.error('Erro ao copiar:', err);
-                alert('❌ Erro ao copiar imagem.');
+                alert('❌ Erro ao copiar. Tente novamente!');
                 btn.textContent = originalText;
             }
         }, 'image/png');
 
     } catch (error) {
-        console.error('Erro:', error);
-        alert('❌ Erro ao gerar captura.');
+        console.error('Erro ao capturar tabela:', error);
+        alert('❌ Erro ao capturar tabela. Tente novamente!');
         btn.textContent = originalText;
     }
 }
