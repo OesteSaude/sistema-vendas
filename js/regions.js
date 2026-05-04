@@ -13,10 +13,12 @@
             const descontosSection = document.getElementById('descontosAdicionaisSection');
             const radioOAB = document.querySelector('input[name="descontoAdicional"][value="OAB"]');
             const radioEstudante = document.querySelector('input[name="descontoAdicional"][value="Estudante"]');
+            const radioPromo50 = document.querySelector('input[name="descontoAdicional"][value="Promo50"]');
             const radioNenhum = document.querySelector('input[name="descontoAdicional"][value="Nenhum"]');
 
             if (selectedRegion === 'Oeste Paulista (SP)') {
                 descontosSection.classList.remove('hidden');
+
                 if (selectedType === 'Individual') {
                     radioOAB.parentElement.style.display = 'inline-flex';
                     radioEstudante.parentElement.style.display = 'inline-flex';
@@ -30,12 +32,20 @@
                     radioOAB.checked = false;
                     radioEstudante.checked = false;
                 }
+
+                // Promo 50% SEMPRE visível em Oeste Paulista
+                radioPromo50.parentElement.style.display = 'inline-flex';
                 radioNenhum.checked = true;
             } else {
                 descontosSection.classList.add('hidden');
                 radioOAB.checked = false;
                 radioEstudante.checked = false;
                 radioNenhum.checked = true;
+            }
+
+            // Promo 50% SEMPRE visível em TODOS os contextos (fora do if também)
+            if (radioPromo50) {
+                radioPromo50.parentElement.style.display = 'inline-flex';
             }
         }
 
