@@ -57,92 +57,71 @@ console.log('%c✅ GOOGLE_SHEET_URL carregado:', 'color: #16a34a; font-weight: b
  * ===== COMPARAÇÃO COM VALIDAÇÕES =====
  */
 function gerarComparacao() {
-     nomeCliente = document.getElementById('nomeCliente')?.value?.trim() || '';
-     // ⭐ CAPTURAR CIDADE
-        const cidade = document.getElementById('cidade')?.value || '';
-
-        console.log('%c🏙️ Cidade capturada:', 'color: #0066cc; font-weight: bold;', cidade);
-
-        // Validar cidade
-        if (!cidade) {
-            alert('⚠️ Selecione uma cidade!');
-            return;
-        }
-
-    // ⭐ VALIDAÇÃO 1: Verificar se tem faixas selecionadas
-    if (faixasSelecionadas.size === 0) {
-        showTutorialModal(2); // ⭐ Mostra tutorial de faixas
+    const nomeCliente = document.getElementById('nomeCliente')?.value?.trim() || '';
+    const cidade = document.getElementById('cidade')?.value?.trim() || '';
+    console.log('%c🏙️ Cidade capturada:', 'color: #0066cc; font-weight: bold;', cidade);
+    if (!cidade) {
+        alert('⚠️ Selecione uma cidade!');
         return;
     }
-
-    // ⭐ VALIDAÇÃO 2: Contar total de pessoas
+    if (faixasSelecionadas.size === 0) {
+        showTutorialModal(2);
+        return;
+    }
     const faixasComQuantidade = [];
     let totalPessoas = 0;
-
     faixasSelecionadas.forEach((_, numero) => {
         const qtdInput = document.getElementById(`qtd${numero}`);
         const qtd = qtdInput ? (parseInt(qtdInput.value) || 0) : faixasSelecionadas.get(numero);
-        
         if (qtd > 0) {
             faixasComQuantidade.push({ ...obterFaixaInfo(numero), qtd: qtd });
             totalPessoas += qtd;
         }
     });
-
-    // ⭐ VALIDAÇÃO 3: Verificar se tem quantidade
     if (faixasComQuantidade.length === 0) {
-        showTutorialModal(2); // ⭐ Mostra tutorial de faixas
+        showTutorialModal(2);
         return;
     }
-
-    // ⭐ VALIDAÇÃO 4: REGRA FAMILIAR - Mínimo 2 pessoas
     if (selectedType === 'Familiar' && totalPessoas < 2) {
         console.log('%c⚠️ Validação de Familiar falhou!', 'color: #ea580c; font-weight: bold;');
-        console.log(`Total de pessoas: ${totalPessoas}`);
-        
-        // Mostrar modal ao invés de confirm()
+        console.log('Total de pessoas:', totalPessoas);
         document.getElementById('totalPessoasModal').textContent = totalPessoas;
         document.getElementById('modalValidacaoFamiliar').classList.remove('hidden');
         return;
     }
-
-    // ⭐ VALIDAÇÃO 5: Verificar se tem planos selecionados
     if (!planosSelecionados || planosSelecionados.length === 0) {
-        showTutorialModal(3); // ⭐ Mostra tutorial de planos
+        showTutorialModal(3);
         return;
     }
-
     console.log('%c✅ Validações passaram!', 'color: #16a34a; font-weight: bold;');
-    console.log(`Total de pessoas: ${totalPessoas}`);
-    console.log(`Tipo: ${selectedType}`);
-
-    const taxaAdmInput = document.getElementById('taxaAdm').value;
-    const taxaAdmValor = (APP_DATA.regioes[selectedRegion].requerTaxa && taxaAdmInput) ? parseFloat(taxaAdmInput) : 0;
-
+    console.log('Total de pessoas:', totalPessoas);
+    console.log('Tipo:', selectedType);
+    const taxaAdmInput = document.getElementById('taxaAdm')?.value?.trim() || '';
+    const taxaAdmValor = (APP_DATA.regioes[selectedRegion].requerTaxa && taxaAdmInput) ? parseFloat(taxaAdmInput) || 0 : 0;
     let descontoAdicionalTipo = document.querySelector('input[name="descontoAdicional"]:checked')?.value || 'Nenhum';
-    let descontoAdicionalPercentual = descontoAdicionalTipo === 'OAB' ? 15 : (descontoAdicionalTipo === 'Estudante' ? 20 : 0);
-
+    let descontoAdicionalPercentual = 0;
+    if (descontoAdicionalTipo === 'OAB') {
+        descontoAdicionalPercentual = 15;
+    } else if (descontoAdicionalTipo === 'Estudante') {
+        descontoAdicionalPercentual = 20;
+    }
     let resultados = planosSelecionados.map(plano => {
         const subtotal = faixasComQuantidade.reduce((acc, f) => {
             const valor = obterValorPlano(selectedRegion, selectedType, plano, f.chave);
             return acc + (valor !== null ? (f.qtd * valor) : 0);
         }, 0);
-        
         let descontoFamiliar = 0;
         let descontoAdicional = 0;
-
-        if (descontoAdicionalPercentual > 0) {
+        if (descontoAdicionalTipo === 'Promo50') {
+            descontoAdicional = subtotal * 0.5;
+        } else if (descontoAdicionalPercentual > 0) {
             descontoAdicional = subtotal * (descontoAdicionalPercentual / 100);
         } else if (selectedRegion === 'Oeste Paulista (SP)' && selectedType === 'Familiar' && !plano.includes('Ouro')) {
             descontoFamiliar = subtotal * 0.10;
         }
-        
         const valorFinal = subtotal - descontoFamiliar - descontoAdicional + taxaAdmValor;
-        
         return { plano, subtotal, descontoFamiliar, descontoAdicional, descontoAdicionalTipo, taxaAdm: taxaAdmValor, valorFinal };
     });
-
-    // Adiciona o plano odontológico se selecionado
     const incluirOdonto = document.getElementById('incluirPlanoOdontologico')?.checked || false;
     if (incluirOdonto) {
         const valorOdontoTotal = calcularPlanoOdontologico();
@@ -156,12 +135,10 @@ function gerarComparacao() {
             valorFinal: valorOdontoTotal
         });
     }
-
     const ordemPlanos = ['Premium IV', 'Premium III', 'Premium II', 'Premium I', 'Ouro'];
     resultados.sort((a, b) => {
         if (a.plano.includes('Odontológico') && !b.plano.includes('Odontológico')) return 1;
         if (!a.plano.includes('Odontológico') && b.plano.includes('Odontológico')) return -1;
-        
         const getOrdem = (plano) => {
             for (let i = 0; i < ordemPlanos.length; i++) {
                 if (plano.includes(ordemPlanos[i])) return i;
@@ -170,7 +147,6 @@ function gerarComparacao() {
         };
         return getOrdem(a.plano) - getOrdem(b.plano);
     });
-
     comparacaoAtual = {
         vendedor: vendedorLogado,
         regiao: selectedRegion,
@@ -186,8 +162,7 @@ function gerarComparacao() {
         incluirOdonto: incluirOdonto,
         totalPessoas: totalPessoas
     };
-
-	salvarCotacaoNoLog();
+    salvarCotacaoNoLog();
     renderizarResultado();
     mudarAba(5);
 }
@@ -320,8 +295,7 @@ function mudarParaIndividual() {
             // Retorna o plano original se não for Exclusivo ou Empresarial
             return plano;
         }
-
-        function renderizarResultado() {
+function renderizarResultado() {
 	const { vendedor, regiao, tipo, cliente, faixas, resultados, taxaAdm } = comparacaoAtual;
 	
 	const CORES_ADM = {
@@ -329,7 +303,6 @@ function mudarParaIndividual() {
 		'LANCERS': '#EA580C'
 	};
 	
-	// ⭐ USAR O SERVICE PARA BUSCAR DADOS DO VENDEDOR
 	const dadosContato = VENDEDOR_SERVICE.obterDadosVendedorLocal(vendedor);
 	
 	nomeClienteInput = document.getElementById('nomeCliente')?.value || 'Não informado';
@@ -402,7 +375,18 @@ function mudarParaIndividual() {
 
     if (resultados.some(r => r.descontoAdicional > 0)) {
         const primeiroResultadoComDesconto = resultados.find(r => r.descontoAdicional > 0);
-        const nomeDesconto = primeiroResultadoComDesconto.descontoAdicionalTipo === 'OAB' ? 'DESCONTO OAB (15%)' : 'DESCONTO ESTUDANTE (20%)';
+        let nomeDesconto = '';
+        
+        if (primeiroResultadoComDesconto.descontoAdicionalTipo === 'OAB') {
+            nomeDesconto = 'DESCONTO OAB (15%)';
+        } else if (primeiroResultadoComDesconto.descontoAdicionalTipo === 'Estudante') {
+            nomeDesconto = 'DESCONTO ESTUDANTE (20%)';
+        } else if (primeiroResultadoComDesconto.descontoAdicionalTipo === 'Promo50') {
+            nomeDesconto = 'DESCONTO PROMO 50% (3 PRIMEIRAS MENSALIDADES)';
+        } else {
+            nomeDesconto = 'DESCONTO ADICIONAL';
+        }
+        
         tabelaHTML += `<tr class="row-desconto"><td colspan="2">- ${nomeDesconto}</td>`;
         tabelaHTML += resultados.map(r => {
             const isOdonto = r.plano.includes('Odontológico');
@@ -564,3 +548,5 @@ function mostrarModalCRM() {
 
 }
 
+// ⭐ Exportar função globalmente
+window.carregarValoresPlanos = carregarValoresPlanos;
