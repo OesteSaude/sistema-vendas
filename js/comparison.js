@@ -425,7 +425,7 @@ function renderizarResultado() {
                     </p>
                 </div>
                 <p style="font-size: 11px; color: #6b7280; padding: 20px; text-align: center; margin-top: 5px; margin-bottom: 12px; font-style: italic; font-family: sans-serif;">
-                    *Proposta válida por 20 dias a partir da data de geração
+                    *Proposta válida por 20 dias.
                 </p>
             `;
 
