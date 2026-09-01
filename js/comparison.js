@@ -295,7 +295,6 @@ function mudarParaIndividual() {
             // Retorna o plano original se não for Exclusivo ou Empresarial
             return plano;
         }
-        
 function renderizarResultado() {
 	const { vendedor, regiao, tipo, cliente, faixas, resultados, taxaAdm } = comparacaoAtual;
 	
@@ -356,32 +355,11 @@ function renderizarResultado() {
         tabelaHTML += '</tr>';
     });
 
-    /*tabelaHTML += '<tr class="row-subtotal"><td colspan="2">SUBTOTAL</td>';
+    tabelaHTML += '<tr class="row-subtotal"><td colspan="2">SUBTOTAL</td>';
     tabelaHTML += resultados.map(r => {
         const isOdonto = r.plano.includes('Odontológico');
         const classe = isOdonto ? 'class="col-odontologico"' : '';
         return `<td ${classe}>${formatarMoeda(r.subtotal)}</td>`;
-    }).join('');
-    tabelaHTML += '</tr>';*/
-
-    if (taxaAdm > 0) {
-        const adm = regiao.includes('Corpe') ? 'CORPE' : (regiao.includes('Lancers') ? 'LANCERS' : '');
-        const corTaxa = CORES_ADM[adm];
-        tabelaHTML += `<tr class="row-taxa" style="background-color: ${corTaxa}; color: white;"><td colspan="2">TAXA ADMINISTRADORA - ${adm}</td>`;
-        tabelaHTML += resultados.map(r => {
-            const isOdonto = r.plano.includes('Odontológico');
-            const classe = isOdonto ? 'class="col-odontologico"' : '';
-            return `<td ${classe}>+ ${formatarMoeda(r.taxaAdm)}</td>`;
-        }).join('');
-        tabelaHTML += '</tr>';
-    }
-
-    tabelaHTML += '<tr class="row-valor-antes"><td colspan="2">VALOR TOTAL</td>';
-    tabelaHTML += resultados.map(r => {
-        const isOdonto = r.plano.includes('Odontológico');
-        const classe = isOdonto ? 'class="col-odontologico"' : '';
-        const valorAntes = r.subtotal + r.taxaAdm;
-        return `<td ${classe}>${formatarMoeda(valorAntes)}</td>`;
     }).join('');
     tabelaHTML += '</tr>';
 
@@ -404,7 +382,7 @@ function renderizarResultado() {
         } else if (primeiroResultadoComDesconto.descontoAdicionalTipo === 'Estudante') {
             nomeDesconto = 'DESCONTO ESTUDANTE (20%)';
         } else if (primeiroResultadoComDesconto.descontoAdicionalTipo === 'Promo50') {
-            nomeDesconto = 'DESCONTO PROMO 50%';
+            nomeDesconto = 'DESCONTO PROMO 50% (3 PRIMEIRAS MENSALIDADES)';
         } else {
             nomeDesconto = 'DESCONTO ADICIONAL';
         }
@@ -418,16 +396,26 @@ function renderizarResultado() {
         tabelaHTML += '</tr>';
     }
 
-    tabelaHTML += '<tr class="row-total"><td colspan="2">VALOR COM DESCONTO</td>';
+    if (taxaAdm > 0) {
+        const adm = regiao.includes('Corpe') ? 'CORPE' : (regiao.includes('Lancers') ? 'LANCERS' : '');
+        const corTaxa = CORES_ADM[adm];
+        tabelaHTML += `<tr class="row-taxa" style="background-color: ${corTaxa}; color: white;"><td colspan="2">TAXA ADMINISTRADORA - ${adm}</td>`;
+        tabelaHTML += resultados.map(r => {
+            const isOdonto = r.plano.includes('Odontológico');
+            const classe = isOdonto ? 'class="col-odontologico"' : '';
+            return `<td ${classe}>+ ${formatarMoeda(r.taxaAdm)}</td>`;
+        }).join('');
+        tabelaHTML += '</tr>';
+    }
+
+    tabelaHTML += '<tr class="row-total"><td colspan="2">VALOR TOTAL</td>';
     tabelaHTML += resultados.map(r => {
         const isOdonto = r.plano.includes('Odontológico');
         const isMelhor = r.valorFinal === menorValor && !isOdonto;
         const classe = isOdonto ? 'class="col-odontologico' + (isMelhor ? ' melhor-valor' : '') + '"' : (isMelhor ? 'class="melhor-valor"' : '');
         return `<td ${classe}>${formatarMoeda(r.valorFinal)}</td>`;
     }).join('');
-    tabelaHTML += '</tr>';
-
-    tabelaHTML += '</tbody></table>';
+    tabelaHTML += '</tr></tbody></table>';
 
     tabelaHTML += `
             <div style="margin-top: 16px; padding: 12px; background: #fef3c7; border: 2px solid #fbbf24; border-radius: 8px; text-align: center;">
@@ -446,7 +434,6 @@ function renderizarResultado() {
         mostrarModalCRM();
     }, 500);
 }
-
 function mostrarModalCRM() {
     console.log('%c📊 Mostrando modal de CRM...', 'color: #00A8B0; font-weight: bold;');
     console.log('%c📦 comparacaoAtual:', 'color: #0066cc; font-weight: bold;', comparacaoAtual);
