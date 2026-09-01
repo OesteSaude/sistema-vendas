@@ -345,8 +345,6 @@ function mudarParaIndividual() {
     document.getElementById('previewResultadoRegiao').textContent = regiao;
     document.getElementById('resultadoCidade').textContent = comparacaoAtual.cidade;
     document.getElementById('previewResultadoTipo').textContent = tipo;
-    document.getElementById('previewResultadoCliente').textContent = nomeClienteInput;
-    document.getElementById('previewResultadoClientePrint').textContent = cliente ? `Cliente: ${cliente}` : '';
 
     const agora = new Date();
     document.getElementById('dataComparacao').textContent = agora.toLocaleDateString('pt-BR', {
