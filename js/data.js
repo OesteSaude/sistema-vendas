@@ -257,7 +257,7 @@ const APP_DATA = {
                 }
             }
         },
-        "Corpe (MS)": {
+        /*"Corpe (MS)": {
             tipos: {
                 "Coletivo por Adesão": ["Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro III (40%)"]
             },
@@ -274,8 +274,8 @@ const APP_DATA = {
                     "Premium (II)": "https://i.imgur.com/35olPDE.jpeg"
                 }
             }
-        },
-        "Corpe (DRD)": {
+        },*/
+        "Corpe (MS)": {
             tipos: {
                 "Coletivo por Adesão": ["Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro III (40%)"]
             },
@@ -319,7 +319,7 @@ const APP_DATA = {
                 }
             }
         },
-        "Lancers (MS)": {
+        /*"Lancers (MS)": {
             tipos: {
                 "Coletivo por Adesão": ["Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro III (40%)"]
             },
@@ -336,8 +336,8 @@ const APP_DATA = {
                     "Premium (II)": "https://i.imgur.com/vZuARKn.jpeg"
                 }
             }
-        },
-        "Lancers (DRD)": {
+        },*/
+        "Lancers (MS)": {
             tipos: {
                 "Coletivo por Adesão": ["Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro III (40%)"]
             },

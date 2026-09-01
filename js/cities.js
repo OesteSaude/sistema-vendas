@@ -31,7 +31,8 @@ const CIDADES_POR_REGIAO = {
         'Nova Andradina',
         'Três Lagoas',
         'Bataguassu',
-        'Anaurilândia'
+        'Anaurilândia',
+        'Dourados'
     ],
     'Corpe (DRD)': [
         'Dourados'
@@ -49,7 +50,8 @@ const CIDADES_POR_REGIAO = {
         'Nova Andradina',
         'Três Lagoas',
         'Bataguassu',
-        'Anaurilândia'
+        'Anaurilândia',
+        'Dourados'
     ],
     'Lancers (DRD)': [
         'Dourados'

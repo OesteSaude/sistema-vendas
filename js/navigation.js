@@ -58,9 +58,6 @@ function mudarAba(numero) {
     }
 }
 
-/**
- * Gerar botões de região
- */
 function gerarBotoesRegiao() {
     const container = document.getElementById('botoesRegiaoContainer');
     if (!container) {
@@ -79,12 +76,12 @@ function gerarBotoesRegiao() {
         'Corpe': {
             titulo: 'Corpe',
             classe: 'regiao-corpe',
-            regioes: ['Corpe (SP)', 'Corpe (DRD)']
+            regioes: ['Corpe (SP)', 'Corpe (MS/DRD)']
         },
         'Lancers': {
             titulo: 'Lancers',
             classe: 'regiao-lancers',
-            regioes: ['Lancers (SP)', 'Lancers (DRD)']
+            regioes: ['Lancers (SP)', 'Lancers (MS/DRD)']
         }
     };
 
