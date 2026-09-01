@@ -26,7 +26,7 @@ const CIDADES_POR_REGIAO = {
         'Presidente Prudente',
         'Presidente Venceslau'
     ],
-    'Corpe (MS)': [
+    'Corpe (MS/DRD)': [
         'Campo Grande',
         'Nova Andradina',
         'Três Lagoas',
@@ -45,7 +45,7 @@ const CIDADES_POR_REGIAO = {
         'Presidente Prudente',
         'Presidente Venceslau'
     ],
-    'Lancers (MS)': [
+    'Lancers (MS/DRD)': [
         'Campo Grande',
         'Nova Andradina',
         'Três Lagoas',
