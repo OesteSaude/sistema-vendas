@@ -395,7 +395,7 @@ function renderizarResultado() {
         tabelaHTML += '</tr>';
     }
 
-    /*if (resultados.some(r => r.descontoAdicional > 0)) {
+    if (resultados.some(r => r.descontoAdicional > 0)) {
         const primeiroResultadoComDesconto = resultados.find(r => r.descontoAdicional > 0);
         let nomeDesconto = '';
         
@@ -416,7 +416,7 @@ function renderizarResultado() {
             return `<td ${classe}>- ${formatarMoeda(r.descontoAdicional)}</td>`;
         }).join('');
         tabelaHTML += '</tr>';
-    }*/
+    }
 
     tabelaHTML += '<tr class="row-total"><td colspan="2">VALOR COM DESCONTO</td>';
     tabelaHTML += resultados.map(r => {
