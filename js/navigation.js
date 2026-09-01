@@ -1,3 +1,4 @@
+
 function mudarAba(numero) {
     console.log(`%c📑 Mudando para aba ${numero}`, 'color: #0066cc; font-weight: bold;');
     
@@ -58,9 +59,6 @@ function mudarAba(numero) {
     }
 }
 
-/**
- * Gerar botões de região
- */
 function gerarBotoesRegiao() {
     const container = document.getElementById('botoesRegiaoContainer');
     if (!container) {
@@ -182,9 +180,6 @@ abas.forEach(aba => {
     });
 });
         
-/**
- * Selecionar tipo de plano
- */
 function selecionarTipo(tipo, btn) {
     console.log(`%c📋 Tipo selecionado: ${tipo}`, 'color: #16a34a; font-weight: bold;');
     
@@ -206,41 +201,23 @@ function selecionarTipo(tipo, btn) {
     atualizarPlanoOdontologicoSection();
 }
 
-/**
- * Validar dados obrigatórios do cliente
- */
 function validarDadosCliente() {
     const nome = document.getElementById('nomeCliente')?.value.trim() || '';
-    const email = document.getElementById('emailCliente')?.value.trim() || '';
-    const telefone = document.getElementById('telefonecliente')?.value.trim() || '';
-    const cidade = document.getElementById('cidade')?.value?.trim() || ''; // ⭐ ADICIONAR
+    const cidade = document.getElementById('cidade')?.value?.trim() || '';
 
-    // Validar email
-    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const emailValido = regexEmail.test(email);
-
-    // Validar telefone (mínimo 10 dígitos)
-    const telefoneLimpo = telefone.replace(/\D/g, '');
-    const telefoneValido = telefoneLimpo.length >= 10;
-
-    // ⭐ VALIDAR CIDADE
     const cidadeValida = cidade.length > 0;
 
-    // ⭐ INCLUIR CIDADE NA VALIDAÇÃO GERAL
-    const todosPreenchidos = nome.length > 0 && emailValido && telefoneValido && cidadeValida;
+    // Apenas cidade é obrigatória agora
+    const todosPreenchidos = cidadeValida;
 
     console.log('%c📋 Validação de Dados do Cliente:', 'color: #0066cc; font-weight: bold;');
-    console.log('Nome:', nome.length > 0 ? '✅' : '❌');
-    console.log('Email:', emailValido ? '✅' : '❌');
-    console.log('Telefone:', telefoneValido ? '✅' : '❌');
-    console.log('Cidade:', cidadeValida ? '✅' : '❌'); // ⭐ ADICIONAR
+    console.log('Nome (opcional):', nome.length > 0 ? '✅' : '➖');
+    console.log('Cidade:', cidadeValida ? '✅' : '❌');
 
     return {
         valido: todosPreenchidos,
-        nome: nome.length > 0,
-        email: emailValido,
-        telefone: telefoneValido,
-        cidade: cidadeValida // ⭐ ADICIONAR
+        nome: true, // opcional, nunca bloqueia
+        cidade: cidadeValida
     };
 }
 
@@ -258,32 +235,24 @@ function atualizarStatusValidacao() {
         } else {
             btnSelecionarTipo.disabled = true;
             btnSelecionarTipo.classList.add('opacity-50', 'cursor-not-allowed');
-            
-            // ⭐ Mostrar tutorial ao clicar no botão desabilitado
+
             btnSelecionarTipo.addEventListener('click', (e) => {
                 if (btnSelecionarTipo.disabled) {
                     e.preventDefault();
-                    showTutorialModal(1); // ⭐ Mostra tutorial de dados obrigatórios
+                    showTutorialModal(1);
                 }
             }, { once: true });
-            
+
             if (avisoValidacao) {
                 avisoValidacao.classList.remove('hidden');
-                
-                // Atualizar mensagem de erro
-                let mensagens = [];
-                if (!validacao.nome) mensagens.push('Nome do cliente');
-                if (!validacao.email) mensagens.push('Email válido');
-                if (!validacao.telefone) mensagens.push('Telefone válido');
-                if (!validacao.cidade) mensagens.push('Cidade'); // ⭐ ADICIONAR
-                
+
                 avisoValidacao.innerHTML = `
                     <p class="text-sm font-bold text-red-800">
                         <i class="fas fa-exclamation-circle"></i>
                         Preencha os dados obrigatórios:
                     </p>
                     <ul class="text-xs text-red-700 mt-2 ml-4">
-                        ${mensagens.map(m => `<li>• ${m}</li>`).join('')}
+                        <li>• Cidade</li>
                     </ul>
                 `;
             }
@@ -291,42 +260,128 @@ function atualizarStatusValidacao() {
     }
 }
 // ===== CARREGAR CIDADES QUANDO REGIÃO É SELECIONADA =====
+let listaCidadesAtual = [];
+
 function carregarCidades() {
     try {
-        const regiao = selectedRegion; // Região já selecionada
-        const selectCidade = document.getElementById('cidade');
-        
+        const regiao = selectedRegion;
+
         console.log('%c🏙️ Carregando cidades para:', 'color: #0066cc; font-weight: bold;', regiao);
-        
-        if (!selectCidade) {
-            console.warn('⚠️ Elemento #cidade não encontrado!');
-            return;
-        }
-        
+
         if (!CIDADES_POR_REGIAO) {
             console.error('❌ CIDADES_POR_REGIAO não está definido!');
             return;
         }
-        
-        // ⭐ SEMPRE LIMPAR E RECARREGAR (REMOVA A VERIFICAÇÃO ANTERIOR)
-        selectCidade.innerHTML = '<option value="">Selecione uma cidade...</option>';
-        
-        // Adicionar cidades da região
-        if (CIDADES_POR_REGIAO[regiao]) {
-            CIDADES_POR_REGIAO[regiao].forEach(cidade => {
-                const option = document.createElement('option');
-                option.value = cidade;
-                option.textContent = cidade;
-                selectCidade.appendChild(option);
-            });
-            console.log(`%c✅ ${CIDADES_POR_REGIAO[regiao].length} cidades carregadas para ${regiao}`, 'color: #16a34a; font-weight: bold;');
-        } else {
-            console.warn('⚠️ Nenhuma cidade encontrada para a região:', regiao);
-        }
+
+        listaCidadesAtual = CIDADES_POR_REGIAO[regiao] || [];
+        console.log(`%c✅ ${listaCidadesAtual.length} cidades disponíveis para ${regiao}`, 'color: #16a34a; font-weight: bold;');
+
+        // Limpa seleção anterior ao trocar de região
+        const inputCidade = document.getElementById('cidadeInput');
+        const hiddenCidade = document.getElementById('cidade');
+        if (inputCidade) inputCidade.value = '';
+        if (hiddenCidade) hiddenCidade.value = '';
     } catch (error) {
         console.error('❌ Erro ao carregar cidades:', error);
     }
 }
+
+function normalizarTexto(texto) {
+    return texto
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, ''); // remove acentos
+}
+
+function renderizarSugestoesCidade(termo) {
+    const container = document.getElementById('cidadeSugestoes');
+    if (!container) return;
+
+    const termoNormalizado = normalizarTexto(termo.trim());
+
+    if (!termoNormalizado) {
+        container.classList.add('hidden');
+        container.innerHTML = '';
+        return;
+    }
+
+    const resultados = listaCidadesAtual.filter(cidade =>
+        normalizarTexto(cidade).includes(termoNormalizado)
+    );
+
+    if (resultados.length === 0) {
+        container.innerHTML = `<div class="px-3 py-2 text-sm text-gray-400">Nenhuma cidade encontrada</div>`;
+        container.classList.remove('hidden');
+        return;
+    }
+
+    container.innerHTML = resultados.map(cidade =>
+        `<div class="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 sugestao-cidade" data-cidade="${cidade}">${cidade}</div>`
+    ).join('');
+
+    container.classList.remove('hidden');
+}
+
+function selecionarCidade(cidade) {
+    const inputCidade = document.getElementById('cidadeInput');
+    const hiddenCidade = document.getElementById('cidade');
+    const container = document.getElementById('cidadeSugestoes');
+
+    if (inputCidade) inputCidade.value = cidade;
+    if (hiddenCidade) hiddenCidade.value = cidade;
+    if (container) {
+        container.classList.add('hidden');
+        container.innerHTML = '';
+    }
+
+    atualizarStatusValidacao();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const inputCidade = document.getElementById('cidadeInput');
+    const hiddenCidade = document.getElementById('cidade');
+    const container = document.getElementById('cidadeSugestoes');
+
+    if (!inputCidade) return;
+
+    inputCidade.addEventListener('input', () => {
+        // Enquanto digita, invalida a cidade confirmada anteriormente
+        if (hiddenCidade) hiddenCidade.value = '';
+        renderizarSugestoesCidade(inputCidade.value);
+        atualizarStatusValidacao();
+    });
+
+    inputCidade.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const termoNormalizado = normalizarTexto(inputCidade.value.trim());
+            if (!termoNormalizado) return;
+
+            // Tenta achar match exato primeiro, senão pega o primeiro resultado da busca
+            const match = listaCidadesAtual.find(c => normalizarTexto(c) === termoNormalizado)
+                || listaCidadesAtual.find(c => normalizarTexto(c).includes(termoNormalizado));
+
+            if (match) {
+                selecionarCidade(match);
+            }
+        }
+    });
+
+    // Clique numa sugestão da lista
+    container?.addEventListener('click', (e) => {
+        const item = e.target.closest('.sugestao-cidade');
+        if (item) {
+            selecionarCidade(item.dataset.cidade);
+        }
+    });
+
+    // Fecha a lista se clicar fora
+    document.addEventListener('click', (e) => {
+        if (!inputCidade.contains(e.target) && !container?.contains(e.target)) {
+            container?.classList.add('hidden');
+        }
+    });
+});
     // ===== EVENT LISTENER PARA O SELECT DE CIDADE =====
 document.addEventListener('DOMContentLoaded', () => {
     const selectCidade = document.getElementById('cidade');
@@ -530,4 +585,24 @@ function showLogoutModal() {
 
 }
 
+// ===== TUTORIAL DE PRIMEIRO ACESSO - NOVO FLUXO DE CIDADE =====
+const TUTORIAL_CIDADE_VERSAO = 'v1'; // ⭐ se mudar o fluxo de novo no futuro, troque pra v2 e todo mundo vê de novo
 
+function chaveTutorialCidade() {
+    const email = localStorage.getItem('vendedorEmail') || 'anonimo';
+    return `tutorialCidadeVisto_${TUTORIAL_CIDADE_VERSAO}_${email}`;
+}
+
+function verificarTutorialCidade() {
+    const jaViu = localStorage.getItem(chaveTutorialCidade());
+    if (!jaViu) {
+        const modal = document.getElementById('modalTutorialCidade');
+        if (modal) modal.classList.remove('hidden');
+    }
+}
+
+function fecharModalTutorialCidade() {
+    const modal = document.getElementById('modalTutorialCidade');
+    if (modal) modal.classList.add('hidden');
+    localStorage.setItem(chaveTutorialCidade(), 'true');
+}

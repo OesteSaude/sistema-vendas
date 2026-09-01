@@ -31,9 +31,15 @@ const CIDADES_POR_REGIAO = {
         'Nova Andradina',
         'Três Lagoas',
         'Bataguassu',
-        'Anaurilândia'
+        'Anaurilândia',
+        'Dourados'
     ],
     'Corpe (DRD)': [
+        'Campo Grande',
+        'Nova Andradina',
+        'Três Lagoas',
+        'Bataguassu',
+        'Anaurilândia',
         'Dourados'
     ],
     'Lancers (SP)': [
@@ -49,11 +55,17 @@ const CIDADES_POR_REGIAO = {
         'Nova Andradina',
         'Três Lagoas',
         'Bataguassu',
-        'Anaurilândia'
+        'Anaurilândia',
+        'Dourados'
     ],
     'Lancers (DRD)': [
+        'Campo Grande',
+        'Nova Andradina',
+        'Três Lagoas',
+        'Bataguassu',
+        'Anaurilândia',
         'Dourados'
-    ]
+    ],
 };
 
 /**

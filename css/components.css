@@ -99,6 +99,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             overflow: hidden;
+            padding: 0 20px;
         }
 
         .oeste-tab-button {
@@ -129,7 +130,7 @@
 
         .oeste-tab-content {
             display: none;
-            padding: 20px;
+            padding: 0;
         }
 
         .oeste-tab-content.active {

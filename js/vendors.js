@@ -144,7 +144,7 @@ function abrirModalCriarVendedor() {
 
         <div class="mt-4 p-3 bg-yellow-100 border border-yellow-400 rounded-lg text-center">
             <p class="text-xs text-yellow-800 font-medium">
-                <strong>⚠️ Senha Padrão:</strong> Senha123! O vendedor deverá alterá-la no primeiro acesso.
+                <strong>⚠️ Senha Padrão:</strong> Senha123! O vendedor poderá alterá-la ou mante-lá no primeiro acesso.
             </p>
         </div>
 
