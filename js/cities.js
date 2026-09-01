@@ -26,7 +26,7 @@ const CIDADES_POR_REGIAO = {
         'Presidente Prudente',
         'Presidente Venceslau'
     ],
-    'Corpe (MS/DRD)': [
+    'Corpe (MS)': [
         'Campo Grande',
         'Nova Andradina',
         'Três Lagoas',
@@ -35,6 +35,11 @@ const CIDADES_POR_REGIAO = {
         'Dourados'
     ],
     'Corpe (DRD)': [
+        'Campo Grande',
+        'Nova Andradina',
+        'Três Lagoas',
+        'Bataguassu',
+        'Anaurilândia',
         'Dourados'
     ],
     'Lancers (SP)': [
@@ -45,7 +50,7 @@ const CIDADES_POR_REGIAO = {
         'Presidente Prudente',
         'Presidente Venceslau'
     ],
-    'Lancers (MS/DRD)': [
+    'Lancers (MS)': [
         'Campo Grande',
         'Nova Andradina',
         'Três Lagoas',
@@ -54,8 +59,13 @@ const CIDADES_POR_REGIAO = {
         'Dourados'
     ],
     'Lancers (DRD)': [
+        'Campo Grande',
+        'Nova Andradina',
+        'Três Lagoas',
+        'Bataguassu',
+        'Anaurilândia',
         'Dourados'
-    ]
+    ],
 };
 
 /**

@@ -275,7 +275,7 @@ const APP_DATA = {
                 }
             }
         },*/
-        "Corpe (MS/DRD)": {
+        "Corpe (DRD)": {
             tipos: {
                 "Coletivo por Adesão": ["Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro III (40%)"]
             },
@@ -337,7 +337,7 @@ const APP_DATA = {
                 }
             }
         },*/
-        "Lancers (MS/DRD)": {
+        "Lancers (DRD)": {
             tipos: {
                 "Coletivo por Adesão": ["Premium II (30%)", "Premium III (40%)", "Premium IV (50%)", "Premium Ouro III (40%)"]
             },

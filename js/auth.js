@@ -30,9 +30,6 @@ let vendedorLogado = '';
 let vendedorUID = '';
 let vendedorDados = {};
 
-/**
- * Fazer login com email e senha do Firebase
- */
 async function fazerLogin() {
     const email = document.getElementById('loginEmail').value.trim();
     const senha = document.getElementById('loginPassword').value.trim();
@@ -105,6 +102,8 @@ async function fazerLogin() {
                 gerarFaixasInline();
                 gerarBotoesRegiao();
                 mudarAba(0);
+
+                verificarTutorialCidade();
 
                 document.getElementById('loginEmail').value = '';
                 document.getElementById('loginPassword').value = '';
@@ -388,6 +387,9 @@ async function verificarCacheVendedor() {
                     console.error('%c❌ Erro ao carregar valores dos planos', 'color: #dc2626; font-weight: bold;');
                     LOADING_SERVICE.error('❌ Erro ao carregar dados');
                 }
+
+                verificarTutorialCidade();
+                
             } else {
                 console.log('%c⚠️ Nenhum usuário autenticado', 'color: #ea580c; font-weight: bold;');
                 
@@ -449,6 +451,8 @@ function fecharModalAlterarSenha() {
         }
     });
 }
+
+
 function preencherDadosVendedor() {
     const nome = localStorage.getItem('vendedorNome');
     const email = localStorage.getItem('vendedorEmail');
