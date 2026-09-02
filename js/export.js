@@ -1,4 +1,4 @@
-        async function copiarParaWhatsApp() {
+async function copiarParaWhatsApp() {
     if (!comparacaoAtual.resultados) {
         alert('⚠️ Gere a comparação primeiro!');
         return;
@@ -203,9 +203,7 @@ function imprimirPDF() {
         window.print();
     }
 }
-/**
- * Salvar cotação no Google Sheets via Apps Script
- */
+
 async function salvarCotacaoNoLog() {
     console.log('%c📊 Salvando cotação no log...', 'color: #0066cc; font-weight: bold;');
     
@@ -309,4 +307,3 @@ async function salvarCotacaoNoLog() {
         LOADING_SERVICE.error('❌ Erro ao registrar cotação no log');
     }
 }
-

@@ -374,8 +374,8 @@
         #tabelaComparativa th {
             background: var(--oeste-azul-escuro);
             color: white;
-            padding: 8px 6px;
-            font-size: 11px;
+            padding: 10px 10px;
+            font-size: 10px;
             font-weight: 700;
             text-align: center;
             border: 1px solid rgba(255,255,255,0.2);
@@ -388,7 +388,7 @@
 
         #tabelaComparativa td {
             padding: 6px 4px;
-            font-size: 11px;
+            font-size: 14px;
             text-align: center;
             border: 1px solid var(--oeste-cinza-medio);
             color: #1e293b;
@@ -421,7 +421,7 @@
             background: var(--oeste-turqueza) 100%;
             color: white;
             font-weight: 800;
-            font-size: 13px;
+            font-size: 16px;
             padding: 10px 6px;
         }
 
